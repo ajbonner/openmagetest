@@ -81,7 +81,7 @@ class Ibuildings_Mage_Test_Factory_Product extends Ibuildings_Mage_Test_Factory
     }
     
     /**
-     * Retrieve category id/URL pairs
+     * Retrieve category ids
      *
      * @return array
      */
