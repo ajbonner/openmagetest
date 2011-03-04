@@ -190,9 +190,9 @@ abstract class Ibuildings_Mage_Test_PHPUnit_ControllerTestCase
         Mage::app()->setResponse(new Ibuildings_Mage_Controller_Response_HttpTestCase);
         
         // Rewrite the core classes at runtime to prevent emails from being sent
-        Mage::getConfig()->setNode('global/models/core/rewrite/email_template', 'Ibuildings_Test_Model_Email_Template');
-        // This is a hack to get the runtime config changes to take effect
-        Mage::getModel('core/email_template');
+        // Mage::getConfig()->setNode('global/models/core/rewrite/email_template', 'Ibuildings_Test_Model_Email_Template');
+        // // This is a hack to get the runtime config changes to take effect
+        // Mage::getModel('core/email_template');
     }
 
     /**
@@ -485,18 +485,20 @@ abstract class Ibuildings_Mage_Test_PHPUnit_ControllerTestCase
             $configData->setPath($path);
             $configData->setValue($value);
             // Calculate scope
-            // $scope = ($scope)? $scope : 'default';
-            // $configData->setScope($scope);
-            // $configData->setScopeId(0);
+            $scope = ($scope)? $scope : 'default';
+            $configData->setScope($scope);
             $configData->save();
             $this->_newConfigValues[] = $configData;
-        }
-            
+        } 
         foreach ($configCollection as $config) {
             $this->_originalConfigValues[] = $config;
             $config->setValue($value);
             $config->save();
         }
+        unset(
+            $configCollection,
+            $configData
+        );
     }
     
     /**
@@ -511,18 +513,17 @@ abstract class Ibuildings_Mage_Test_PHPUnit_ControllerTestCase
      **/
     public function removeConfig($path, $scope = null)
     {
-        $configCollection = Mage::getModel('core/config_data')->getCollection();
-            
+        $configCollection = Mage::getModel('core/config_data')->getCollection();  
         $configCollection->addFieldToFilter('path', array("eq" => $path));
         if (is_string($scope)) {
             $configCollection->addFieldToFilter('scope', array("eq" => $scope));
         }
-        $configCollection->load();
-            
+        $configCollection->load();  
         foreach ($configCollection as $config) {
             $this->_removedConfigValues[] = $config;
             $config->delete();
         }
+        unset($configCollection);
     }
     
     /**
@@ -533,29 +534,35 @@ abstract class Ibuildings_Mage_Test_PHPUnit_ControllerTestCase
      **/
     public function resetConfig()
     {
+        $config = Mage::getModel('core/config_data');
         // Reset the original values
-        foreach ($this->_originalConfigValues as $originalConfig) {
-            $config = Mage::getModel('core/config_data');
-            $config->load($originalConfig->getId());
+        foreach ($this->_originalConfigValues as $value) {
+            $config->reset();
+            $config->load($value->getId());
+            $config->setValue($value->getValue());
             $config->save();
         }
         // Remove the new config valuse
-        // foreach ($this->_newConfigValues as $value) {
-        //     $config = Mage::getModel('core/config_data');
-        //     $config->load($value->getId());
-        //     $config->delete();
-        // }
-        
+        foreach ($this->_newConfigValues as $value) {
+            $config->reset();
+            $config->load($value->getId());
+            $config->delete();
+        }
         // Create the values that were removed
         foreach ($this->_removedConfigValues as $value) {
-            $configData = Mage::getModel('core/config_data');
-            $configData->setPath($value->getPath());
-            $configData->setValue($value->getValue());
+            $config->reset();
+            $config->setPath($value->getPath());
+            $config->setValue($value->getValue());
             // Calculate scope
             $scope = ($value->getScope())? $value->getScope() : 'default';
-            $configData->setScope($scope);
-            $configData->save();
-            unset($configData);
+            $config->setScope($scope);
+            $config->save();
         }
+        unset(
+            $config,
+            $this->_originalConfigValues,
+            $this->_newConfigValues,
+            $this->_removedConfigValues
+        );
     }
 }
