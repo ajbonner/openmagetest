@@ -83,7 +83,7 @@ class Ibuildings_Mage_Test_Factory_Product extends Ibuildings_Mage_Test_Factory
     /**
      * Retrieve category ids
      *
-     * @return array
+     * @return string
      */
     protected static function _getCategoryIds()
     {
