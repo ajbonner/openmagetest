@@ -72,6 +72,7 @@ class Ibuildings_Mage_Test_Factory_Product extends Ibuildings_Mage_Test_Factory
 
         $productAdapter = Mage::getModel('catalog/convert_adapter_product');
         $productAdapter->saveRow($data);
+        unset($productAdapter);
         
         $product = Mage::getModel('catalog/product');
         $productId = $product->getIdBySku($_data['sku']);
@@ -100,6 +101,7 @@ class Ibuildings_Mage_Test_Factory_Product extends Ibuildings_Mage_Test_Factory
         $select->where('e.level>?', '1');
 
         $categoryIds = $adapter->fetchPairs($select);
+        unset($adapter);
 
         return implode(',', array_keys($categoryIds));
     }
