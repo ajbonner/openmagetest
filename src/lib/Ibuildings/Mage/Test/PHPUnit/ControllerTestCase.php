@@ -58,6 +58,13 @@ abstract class Ibuildings_Mage_Test_PHPUnit_ControllerTestCase
     protected $_originalConfigValues = array();
     
     /**
+     * Internal registry of the new config values.
+     *
+     * @var array
+     **/
+    protected $_newConfigValues = array();
+    
+    /**
      * Internal registry of the removed config values.
      *
      * @var array
@@ -114,8 +121,6 @@ abstract class Ibuildings_Mage_Test_PHPUnit_ControllerTestCase
     {
         // Clear any cache to ensure we testing clean config
         self::cleanCache();
-        // Enable the cache to speed up the tests
-        self::enableCache();
     }
 
     /**
@@ -154,7 +159,7 @@ abstract class Ibuildings_Mage_Test_PHPUnit_ControllerTestCase
         // Reset any database config after tests have been run
         $this->resetConfig();
         // Re-initialise the Magento config after any dynamic changes during testing
-        Mage::getConfig()->reinit();
+        // Mage::getConfig()->reinit();
     }
 
     /**
@@ -473,6 +478,19 @@ abstract class Ibuildings_Mage_Test_PHPUnit_ControllerTestCase
             $configCollection->addFieldToFilter('scope', array("eq" => $scope));
         }
         $configCollection->load();
+        
+        // If existing config does not exist create it
+        if (count($configCollection) == 0) {
+            $configData = Mage::getModel('core/config_data');
+            $configData->setPath($path);
+            $configData->setValue($value);
+            // Calculate scope
+            // $scope = ($scope)? $scope : 'default';
+            // $configData->setScope($scope);
+            // $configData->setScopeId(0);
+            $configData->save();
+            $this->_newConfigValues[] = $configData;
+        }
             
         foreach ($configCollection as $config) {
             $this->_originalConfigValues[] = $config;
@@ -515,21 +533,18 @@ abstract class Ibuildings_Mage_Test_PHPUnit_ControllerTestCase
      **/
     public function resetConfig()
     {
-        // Restet the original values
+        // Reset the original values
         foreach ($this->_originalConfigValues as $originalConfig) {
-            $configCollection = Mage::getModel('core/config_data')->getCollection();
-
-            $configCollection->addFieldToFilter('path', array("eq" => $originalConfig->getPath()));
-            if (is_string($originalConfig->getScope())) {
-                $configCollection->addFieldToFilter('scope', array("eq" => $originalConfig->getScope()));
-            }
-            $configCollection->load();
-
-            foreach ($configCollection as $config) {
-                $config->setValue($originalConfig->getValue());
-                $config->save();
-            }
+            $config = Mage::getModel('core/config_data');
+            $config->load($originalConfig->getId());
+            $config->save();
         }
+        // Remove the new config valuse
+        // foreach ($this->_newConfigValues as $value) {
+        //     $config = Mage::getModel('core/config_data');
+        //     $config->load($value->getId());
+        //     $config->delete();
+        // }
         
         // Create the values that were removed
         foreach ($this->_removedConfigValues as $value) {
@@ -539,6 +554,7 @@ abstract class Ibuildings_Mage_Test_PHPUnit_ControllerTestCase
             // Calculate scope
             $scope = ($value->getScope())? $value->getScope() : 'default';
             $configData->setScope($scope);
+            $configData->save();
             unset($configData);
         }
     }
