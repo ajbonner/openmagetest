@@ -25,35 +25,83 @@ class Ibuildings_Mage_Test_Factory_Product extends Ibuildings_Mage_Test_Factory
     * @return Mage_Catalog_Product
     * @author Alistair Stead
     **/
-    public static function build($type = 'simple', array $data = array())
+    public static function build(array $data = array())
     {
         $_data = array(
-            'sku' => '9999999',
-            'name' => 'fixture',
+            'store' => 'default',
+            'website' => 'base',
             'attribute_set' => 'Default',
-            'attribute_set_id' => 4, // added to fix DB constraints problem
-            'qty' => '100',
-            'min_qty' => '10',
-            'is_in_stock' => '1',
-            'use_config_manage_stock' => '1',
-            'manage_stock' => '1',
-            'status' => 'Enabled',
-            'weight' => '140',
-            'visibility' => '1',
+            'type' => 'simple',
+            'category_ids' => self::_getCategoryIds(),
+            'sku' => time(),
+            'has_options' => '0',
             'price' => '150.00',
-            'remove_from_back_order' => '1',
+            'cost' => '',
+            'weight' => '140',
+            'minimal_price' => '',
+            'status' => 'Enabled',
+            'tax_class_id' => 'Taxable Goods',
+            'visibility' => 'Catalog, Search', 
+            'name' => 'Fixture',
+            'url_key' => 'fixture'.time(),
+            'meta_title' => 'Fixture',
+            'meta_description' => 'Fixture',
+            'description' => 'Fixture',
+            'meta_keyword' => 'Fixture',
+            'short_description' => 'Fixture',
+            'qty' => '10000',
+            'min_qty' => '1',
+            'use_config_min_qty' => '1',
+            'is_qty_decimal' => '1',
+            'backorders' => '0',
+            'use_config_manage_stock' => '1',
+            'min_sale_qty' => '1',
+            'use_config_min_sale_qty' => '1',
+            'max_sale_qty' => '100',
+            'use_config_max_sale_qty' => '1',
+            'is_in_stock' => '1',
+            'notify_stock_qty' => '0',
+            'use_config_notify_stock_qty' => '1',
+            'manage_stock' => '1',
+            'use_config_manage_stock' => '1',
+            'store_id' => '0',
+            'product_type_id' => 'simple'
         );
 
         $data = array_merge($_data, $data);
 
+        $productAdapter = Mage::getModel('catalog/convert_adapter_product');
+        $productAdapter->saveRow($data);
+        
         $product = Mage::getModel('catalog/product');
-        $product->fromArray($data);
-        $product->setIsMassupdate(true);
-        $product->setExcludeUrlRewrite(true);
-        $product->setTypeId($type);
-        $product->setTypeInstance(Mage::getSingleton('catalog/product_type')
-            ->factory($product, true), true);
-
+        $productId = $product->getIdBySku($_data['sku']);
+        $product->load($productId);
+        
         return $product;
     }
+    
+    /**
+     * Retrieve category id/URL pairs
+     *
+     * @return array
+     */
+    protected static function _getCategoryIds()
+    {
+        $adapter = Mage::getSingleton('core/resource')->getConnection('core_write');
+        $urlAttributeId = Mage::getSingleton('eav/config')
+            ->getAttribute('catalog_category', 'url_path')
+            ->getId();
+        $select = $adapter->select()
+            ->from(array('e' => Mage::getSingleton('core/resource')->getTableName('catalog/category')), 'entity_id')
+            ->join(
+                array('ev' => Mage::getSingleton('core/resource')->getTableName('catalog/category') . '_varchar'),
+                'e.entity_id = ev.entity_id AND ev.attribute_id=' . $urlAttributeId,
+                array('value'));
+        $select->where('e.level>?', '1');
+
+        $categoryIds = $adapter->fetchPairs($select);
+
+        return implode(',', array_keys($categoryIds));
+    }
+    
 }
