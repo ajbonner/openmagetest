@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Ibuildings_MageTest>
+             <active>true</active>
+             <codePool>community</codePool>
+             <depends>
+                 <Mage_Core />
+             </depends>
+        </Ibuildings_MageTest>
+    </modules>
+</config>
