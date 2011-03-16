@@ -8,7 +8,7 @@ This allows you to build and run functional controller tests in the same way you
 
 ## Requirements ##
 
-* PHPUnit 5.3+
+* PHPUnit 3.5+
 
 ## Manual Install ##
 
