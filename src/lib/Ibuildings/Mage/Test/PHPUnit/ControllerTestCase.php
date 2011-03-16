@@ -51,11 +51,25 @@ abstract class Ibuildings_Mage_Test_PHPUnit_ControllerTestCase
     protected $_mail;
     
     /**
-     * Internal registry of the original values.
+     * Internal registry of the original config values.
      *
      * @var array
      **/
     protected $_originalConfigValues = array();
+    
+    /**
+     * Internal registry of the new config values.
+     *
+     * @var array
+     **/
+    protected $_newConfigValues = array();
+    
+    /**
+     * Internal registry of the removed config values.
+     *
+     * @var array
+     **/
+    protected $_removedConfigValues = array();
     
     /**
      * Overloading: prevent overloading to special properties
@@ -107,8 +121,6 @@ abstract class Ibuildings_Mage_Test_PHPUnit_ControllerTestCase
     {
         // Clear any cache to ensure we testing clean config
         self::cleanCache();
-        // Enable the cache to speed up the tests
-        self::enableCache();
     }
 
     /**
@@ -147,7 +159,7 @@ abstract class Ibuildings_Mage_Test_PHPUnit_ControllerTestCase
         // Reset any database config after tests have been run
         $this->resetConfig();
         // Re-initialise the Magento config after any dynamic changes during testing
-        Mage::getConfig()->reinit();
+        // Mage::getConfig()->reinit();
     }
 
     /**
@@ -178,9 +190,9 @@ abstract class Ibuildings_Mage_Test_PHPUnit_ControllerTestCase
         Mage::app()->setResponse(new Ibuildings_Mage_Controller_Response_HttpTestCase);
         
         // Rewrite the core classes at runtime to prevent emails from being sent
-        Mage::getConfig()->setNode('global/models/core/rewrite/email_template', 'Ibuildings_Test_Model_Email_Template');
-        // This is a hack to get the runtime config changes to take effect
-        Mage::getModel('core/email_template');
+        // Mage::getConfig()->setNode('global/models/core/rewrite/email_template', 'Ibuildings_Test_Model_Email_Template');
+        // // This is a hack to get the runtime config changes to take effect
+        // Mage::getModel('core/email_template');
     }
 
     /**
@@ -489,12 +501,52 @@ abstract class Ibuildings_Mage_Test_PHPUnit_ControllerTestCase
             $configCollection->addFieldToFilter('scope', array("eq" => $scope));
         }
         $configCollection->load();
-            
+        
+        // If existing config does not exist create it
+        if (count($configCollection) == 0) {
+            $configData = Mage::getModel('core/config_data');
+            $configData->setPath($path);
+            $configData->setValue($value);
+            // Calculate scope
+            $scope = ($scope)? $scope : 'default';
+            $configData->setScope($scope);
+            $configData->save();
+            $this->_newConfigValues[] = $configData;
+        } 
         foreach ($configCollection as $config) {
             $this->_originalConfigValues[] = $config;
             $config->setValue($value);
             $config->save();
         }
+        unset(
+            $configCollection,
+            $configData
+        );
+    }
+    
+    /**
+     * Remove an internal config value from Magento
+     * 
+     * This mimics the fucntionality of the admin when you set a yes|no option
+     * to no. Orginal values will be stores internally and then restored after
+     * all tests have been run with resetConfig().
+     *
+     * @return void
+     * @author Alistair Stead
+     **/
+    public function removeConfig($path, $scope = null)
+    {
+        $configCollection = Mage::getModel('core/config_data')->getCollection();  
+        $configCollection->addFieldToFilter('path', array("eq" => $path));
+        if (is_string($scope)) {
+            $configCollection->addFieldToFilter('scope', array("eq" => $scope));
+        }
+        $configCollection->load();  
+        foreach ($configCollection as $config) {
+            $this->_removedConfigValues[] = $config;
+            $config->delete();
+        }
+        unset($configCollection);
     }
     
     /**
@@ -505,19 +557,35 @@ abstract class Ibuildings_Mage_Test_PHPUnit_ControllerTestCase
      **/
     public function resetConfig()
     {
-        foreach ($this->_originalConfigValues as $originalConfig) {
-            $configCollection = Mage::getModel('core/config_data')->getCollection();
-
-            $configCollection->addFieldToFilter('path', array("eq" => $originalConfig->getPath()));
-            if (is_string($originalConfig->getScope())) {
-                $configCollection->addFieldToFilter('scope', array("eq" => $originalConfig->getScope()));
-            }
-            $configCollection->load();
-
-            foreach ($configCollection as $config) {
-                $config->setValue($originalConfig->getValue());
-                $config->save();
-            }
+        $config = Mage::getModel('core/config_data');
+        // Reset the original values
+        foreach ($this->_originalConfigValues as $value) {
+            // $config->reset();
+            $config->load($value->getId());
+            $config->setValue($value->getValue());
+            $config->save();
         }
+        // Remove the new config valuse
+        foreach ($this->_newConfigValues as $value) {
+            // $config->reset();
+            $config->load($value->getId());
+            $config->delete();
+        }
+        // Create the values that were removed
+        foreach ($this->_removedConfigValues as $value) {
+            // $config->reset();
+            $config->setPath($value->getPath());
+            $config->setValue($value->getValue());
+            // Calculate scope
+            $scope = ($value->getScope())? $value->getScope() : 'default';
+            $config->setScope($scope);
+            $config->save();
+        }
+        unset(
+            $config,
+            $this->_originalConfigValues,
+            $this->_newConfigValues,
+            $this->_removedConfigValues
+        );
     }
 }
