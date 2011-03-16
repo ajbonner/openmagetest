@@ -36,9 +36,9 @@ class TemplateTest extends PHPUnit_Framework_TestCase
     public function testingEmailTemplateModelShouldBeReturned()
     {
         $this->assertInstanceOf(
-            'Ibuildings_Test_Model_Email_Template',
+            'Ibuildings_MageTest_Model_Email_Template',
             Mage::getModel('core/email_template'),
-            "Ibuildings_Test_Model_Email_Template was not returned as expected"
+            "Ibuildings_MageTest_Model_Email_Template was not returned as expected"
         );
     } // testingEmailTemplateModelShouldBeReturned
 }
