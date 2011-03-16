@@ -537,20 +537,20 @@ abstract class Ibuildings_Mage_Test_PHPUnit_ControllerTestCase
         $config = Mage::getModel('core/config_data');
         // Reset the original values
         foreach ($this->_originalConfigValues as $value) {
-            $config->reset();
+            // $config->reset();
             $config->load($value->getId());
             $config->setValue($value->getValue());
             $config->save();
         }
         // Remove the new config valuse
         foreach ($this->_newConfigValues as $value) {
-            $config->reset();
+            // $config->reset();
             $config->load($value->getId());
             $config->delete();
         }
         // Create the values that were removed
         foreach ($this->_removedConfigValues as $value) {
-            $config->reset();
+            // $config->reset();
             $config->setPath($value->getPath());
             $config->setValue($value->getValue());
             // Calculate scope

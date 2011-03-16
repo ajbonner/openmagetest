@@ -72,6 +72,7 @@ class Ibuildings_Mage_Controller_Request_HttpTestCase
     {
         parent::__construct();
         $this->setHeader('User-Agent', self::MAGE_TEST_USER_AGENT);
+        $this->setHeader('Accept', 'application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5');
     }
 
     /**
