@@ -9,7 +9,6 @@ require_once '/mnt/hgfs/Sites/magento.development.local/public/app/Mage.php';
 
 require_once 'src/app/code/community/Mage/Admin/Model/Session.php';
 require_once 'src/app/code/community/Mage/Core/Controller/Varien/Front.php';
-require_once 'src/app/code/community/Ibuildings/Test/Model/Email/Template.php';
 
 // Include the test cases
 require_once 'src/lib/Ibuildings/Mage/Controller/Request/HttpTestCase.php';
