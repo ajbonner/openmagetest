@@ -76,6 +76,7 @@ class Ibuildings_MageTest_Model_Email_Template extends Mage_Core_Model_Email_Tem
             if (isset($_SERVER['MAGE_TEST'])) {
                 // Store the constructed mail in the application for testing
                 Mage::app()->setResponseEmail($mail);
+                return true;
             }
             $mail->send();
             $this->_mail = null;
