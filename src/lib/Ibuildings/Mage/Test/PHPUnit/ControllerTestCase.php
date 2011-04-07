@@ -142,6 +142,7 @@ abstract class Ibuildings_Mage_Test_PHPUnit_ControllerTestCase
      */
     protected function setUp()
     {
+        self::flushCache();
         // Boostrap Magento with testing objects
         $this->mageBootstrap();
     }
@@ -502,7 +503,6 @@ abstract class Ibuildings_Mage_Test_PHPUnit_ControllerTestCase
      **/
     public static function cleanCache($types = null)
     {
-        // Mage::app()->getCacheInstance()->flush();
         if (is_null($types)) {
             $types = array(
                 'config',
@@ -520,6 +520,17 @@ abstract class Ibuildings_Mage_Test_PHPUnit_ControllerTestCase
                 $tags = Mage::app()->getCacheInstance()->cleanType($type);
             }
         }
+    }
+    
+    /**
+     * Entirely flush the cache within the system
+     *
+     * @return void
+     * @author Alistair Stead
+     **/
+    public static function flushCache()
+    {
+        Mage::app()->getCacheInstance()->flush();
     }
     
     /**
