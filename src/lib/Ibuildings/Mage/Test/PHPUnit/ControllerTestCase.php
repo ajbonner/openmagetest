@@ -500,11 +500,11 @@ abstract class Ibuildings_Mage_Test_PHPUnit_ControllerTestCase
      * @return void
      * @author Alistair Stead
      **/
-    public static function cleanCache($ypes = null)
+    public static function cleanCache($types = null)
     {
         // Mage::app()->getCacheInstance()->flush();
         if (is_null($types)) {
-            $ypes = array(
+            $types = array(
                 'config',
                 'layout',
                 'block_html',
@@ -515,9 +515,9 @@ abstract class Ibuildings_Mage_Test_PHPUnit_ControllerTestCase
             );
         }
         
-        if (!empty($ypes)) {
-            foreach ($ypes as $type) {
-                $tags = Mage::app()->getCacheInstance()->cleanType($tag);
+        if (!empty($types)) {
+            foreach ($types as $type) {
+                $tags = Mage::app()->getCacheInstance()->cleanType($type);
             }
         }
     }
