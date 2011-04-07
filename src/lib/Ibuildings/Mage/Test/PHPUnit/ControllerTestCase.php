@@ -425,11 +425,22 @@ abstract class Ibuildings_Mage_Test_PHPUnit_ControllerTestCase
      * @return void
      * @author Alistair Stead
      **/
-    public static function enableCache()
+    public static function enableCache($types = null)
     {
+        if (is_null($types)) {
+            $ypes = array(
+                'config',
+                'layout',
+                'block_html',
+                'translate',
+                'collections',
+                'eav',
+                'config_api'
+            );
+        }
         $allTypes = Mage::app()->useCache();
         $cacheTypes = array();
-        foreach (Mage::app()->getCacheInstance()->getTypes() as $type) {
+        foreach ($types as $type) {
             $cacheTypes[] = $type->getId();
         }
 
@@ -451,21 +462,32 @@ abstract class Ibuildings_Mage_Test_PHPUnit_ControllerTestCase
      * @return void
      * @author Alistair Stead
      **/
-    public static function disableCache()
+    public static function disableCache($types = null)
     {
+        if (is_null($types)) {
+            $ypes = array(
+                'config',
+                'layout',
+                'block_html',
+                'translate',
+                'collections',
+                'eav',
+                'config_api'
+            );
+        }
         $allTypes = Mage::app()->useCache();
         $cacheTypes = array();
-        foreach (Mage::app()->getCacheInstance()->getTypes() as $type) {
+        foreach ($types as $type) {
             $cacheTypes[] = $type->getId();
         }
 
         $updatedTypes = 0;
-        foreach ($cacheTypes as $code) {
+        foreach ($cacheTypes as $type) {
             if (!empty($allTypes[$code])) {
                 $allTypes[$code] = 0;
                 $updatedTypes++;
             }
-            $tags = Mage::app()->getCacheInstance()->cleanType($code);
+            $tags = Mage::app()->getCacheInstance()->cleanType($type);
         }
         if ($updatedTypes > 0) {
             Mage::app()->saveUseCache($allTypes);
@@ -478,9 +500,26 @@ abstract class Ibuildings_Mage_Test_PHPUnit_ControllerTestCase
      * @return void
      * @author Alistair Stead
      **/
-    public static function cleanCache()
+    public static function cleanCache($ypes = null)
     {
-        Mage::app()->getCacheInstance()->flush();
+        // Mage::app()->getCacheInstance()->flush();
+        if (is_null($types)) {
+            $ypes = array(
+                'config',
+                'layout',
+                'block_html',
+                'translate',
+                'collections',
+                'eav',
+                'config_api'
+            );
+        }
+        
+        if (!empty($ypes)) {
+            foreach ($ypes as $type) {
+                $tags = Mage::app()->getCacheInstance()->cleanType($tag);
+            }
+        }
     }
     
     /**
