@@ -2,14 +2,8 @@
 <phpunit
     bootstrap="bootstrap.php"
     stopOnFailure="true"
-    backupGlobals="true"
-    backupStaticAttributes="true"
     colors="true"
-    convertErrorsToExceptions="true"
-    convertNoticesToExceptions="true"
-    convertWarningsToExceptions="true"
-    processIsolation="false"
-    syntaxCheck="true"
+    syntaxCheck="false"
     verbose="true">
     <testsuite name="Core Tests">
         <directory suffix="Test.php">app/code/core</directory>
