@@ -189,11 +189,6 @@ abstract class Ibuildings_Mage_Test_PHPUnit_ControllerTestCase
         Mage::app($this->mageRunCode, $this->mageRunType, $this->options);
         Mage::app()->setRequest(new Ibuildings_Mage_Controller_Request_HttpTestCase);
         Mage::app()->setResponse(new Ibuildings_Mage_Controller_Response_HttpTestCase);
-        
-        // Rewrite the core classes at runtime to prevent emails from being sent
-        // Mage::getConfig()->setNode('global/models/core/rewrite/email_template', 'Ibuildings_Test_Model_Email_Template');
-        // // This is a hack to get the runtime config changes to take effect
-        // Mage::getModel('core/email_template');
     }
 
     /**
