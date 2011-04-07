@@ -23,7 +23,24 @@ class Mage_CoreController_Varien_ActionTests extends Ibuildings_Mage_Test_PHPUni
      *
      * @var string
      **/
-    protected $controllerRewrite = <<<HDOC
+    protected $_controllerRewrite;
+
+    /**
+     * undocumented class variable
+     *
+     * @var string
+     **/
+    protected $_altControllerRewrite;
+
+    /**
+     * Setup a dependencies and fixtures
+     *
+     * @return void
+     * @author Alistair Stead
+     **/
+    public function setUp()
+    {
+        $this->_controllerRewrite = <<<HDOC
         <config>
             <modules>
                 <Oauth_Customer>
@@ -50,12 +67,7 @@ class Mage_CoreController_Varien_ActionTests extends Ibuildings_Mage_Test_PHPUni
         </config>
 HDOC;
 
-    /**
-     * undocumented class variable
-     *
-     * @var string
-     **/
-    protected $altControllerRewrite = <<<HDOC
+        $this->_altControllerRewrite = <<<HDOC
         <config>
             <modules>
                 <Ibuildings_Test>
@@ -77,6 +89,7 @@ HDOC;
             </frontend>
         </config>
 HDOC;
+    }
     
 
     /**
@@ -87,7 +100,7 @@ HDOC;
     public function controllerRewriteRespectsWhiteSpaceInXMLConfig()
     {
         $config = Mage::getConfig()->getNode(); 
-        $config->extend(new Varien_Simplexml_Element($this->controllerRewrite));
+        $config->extend(new Varien_Simplexml_Element($this->_controllerRewrite));
 
         $this->dispatch('customer/account/login/');
         
