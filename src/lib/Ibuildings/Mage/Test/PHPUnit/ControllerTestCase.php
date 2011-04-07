@@ -480,7 +480,7 @@ abstract class Ibuildings_Mage_Test_PHPUnit_ControllerTestCase
      **/
     public static function cleanCache()
     {
-        Mage::app()->getCacheInstance()->clean(array());
+        Mage::app()->getCacheInstance()->flush();
     }
     
     /**
