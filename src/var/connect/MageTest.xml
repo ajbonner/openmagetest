@@ -12,7 +12,7 @@
 This allows you to build and run functional controller tests in the same way you would with a standard Zend Framework Application using [Zend Test](http://framework.zend.com/manual/en/zend.test.phpunit.html). This mocks the Request and Response objects to that you can query the Response within a suite of tests.</description>
    <license>OSL 3.0</license>
    <license_uri>http://opensource.org/licenses/osl-3.0.php</license_uri>
-   <version>0.1.12</version>
+   <version>0.1.13</version>
    <stability>stable</stability>
    <notes>This module is being used in all our projects and under active development.</notes>
    <authors>

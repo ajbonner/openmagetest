@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Ibuildings_MageTest>
-            <version>0.1.4</version>
+            <version>0.1.12</version>
             <depends>
                 <Mage_Core />
             </depends>
