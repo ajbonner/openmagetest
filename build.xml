@@ -126,11 +126,8 @@
         <symlink overwrite="yes" failonerror="no" link="${deploy.dir}/lib/Ibuildings" resource="${basedir}/src/lib/Ibuildings" />
         <mkdir dir="${deploy.dir}/tests/app/code/"/>
         <symlink overwrite="yes" failonerror="no" link="${deploy.dir}/tests/app/code/core" resource="${basedir}/src/tests/app/code/core" />
-        <symlink overwrite="yes" failonerror="no" link="${deploy.dir}/tests/phpunit.xml" resource="${basedir}/src/tests/phpunit.xml" />
-        <symlink overwrite="yes" failonerror="no" link="${deploy.dir}/tests/bootstrap.php" resource="${basedir}/src/tests/bootstrap.php" />
         <mkdir dir="${deploy.dir}/var/connect"/>
-        <symlink overwrite="yes" failonerror="no" link="${deploy.dir}/var/connect/MageTest.xml" resource="${basedir}/var/connect/MageTest.xml" />
-        <symlink overwrite="yes" failonerror="no" link="${deploy.dir}/var/connect/package.xml" resource="${basedir}/var/connect/package.xml" />
+        <symlink failonerror="no" link="${deploy.dir}/var/connect/MageTest.xml" resource="${basedir}/var/connect/MageTest.xml" />
     </target>
     <target name="remove">
         <delete file="${deploy.dir}/app/code/community/Mage"/>
@@ -141,7 +138,6 @@
         <delete file="${deploy.dir}/tests/phpunit.xml"/>
         <delete file="${deploy.dir}/tests/bootstrap.php"/>
         <delete file="${deploy.dir}/var/connect/MageTest.xml"/>
-        <delete file="${deploy.dir}/var/connect/package.xml"/>
     </target>
     <!-- Default build task -->
     <target name="build" depends="clean,parallelTasks,phpunit,phpcb"/>
