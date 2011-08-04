@@ -120,7 +120,7 @@ abstract class Ibuildings_Mage_Test_PHPUnit_ControllerTestCase
     public static function setUpBeforeClass()
     {
         // Clear any cache to ensure we testing clean config
-        self::cleanCache();
+        // self::cleanCache();
     }
 
     /**
@@ -142,7 +142,7 @@ abstract class Ibuildings_Mage_Test_PHPUnit_ControllerTestCase
      */
     protected function setUp()
     {
-        self::flushCache();
+        // self::flushCache();
         // Boostrap Magento with testing objects
         $this->mageBootstrap();
     }
