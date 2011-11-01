@@ -16,6 +16,7 @@ class Ibuildings_MageTest_Model_Email_Template extends Mage_Core_Model_Email_Tem
      * @param   array       $variables    template variables
      * @return  boolean
      **/
+     
     public function send($email, $name = null, array $variables = array())
     {
         if (!$this->isValidForSend()) {
@@ -23,12 +24,17 @@ class Ibuildings_MageTest_Model_Email_Template extends Mage_Core_Model_Email_Tem
             return false;
         }
 
-        if (is_null($name)) {
-            $name = substr($email, 0, strpos($email, '@'));
+        $emails = array_values((array)$email);
+        $names = is_array($name) ? $name : (array)$name;
+        $names = array_values($names);
+        foreach ($emails as $key => $email) {
+            if (!isset($names[$key])) {
+                $names[$key] = substr($email, 0, strpos($email, '@'));
+            }
         }
 
-        $variables['email'] = $email;
-        $variables['name'] = $name;
+        $variables['email'] = reset($emails);
+        $variables['name'] = reset($names);
 
         ini_set('SMTP', Mage::getStoreConfig('system/smtp/host'));
         ini_set('smtp_port', Mage::getStoreConfig('system/smtp/port'));
@@ -49,27 +55,24 @@ class Ibuildings_MageTest_Model_Email_Template extends Mage_Core_Model_Email_Tem
         }
 
         if ($returnPathEmail !== null) {
-            $mail->setReturnPath($returnPathEmail);
+            $mailTransport = new Zend_Mail_Transport_Sendmail("-f".$returnPathEmail);
+            Zend_Mail::setDefaultTransport($mailTransport);
         }
 
-        if (is_array($email)) {
-            foreach ($email as $emailOne) {
-                $mail->addTo($emailOne, $name);
-            }
-        } else {
-            $mail->addTo($email, '=?utf-8?B?'.base64_encode($name).'?=');
+        foreach ($emails as $key => $email) {
+            $mail->addTo($email, '=?utf-8?B?' . base64_encode($names[$key]) . '?=');
         }
 
         $this->setUseAbsoluteLinks(true);
         $text = $this->getProcessedTemplate($variables, true);
 
-        if($this->isPlain()) {
+        if ($this->isPlain()) {
             $mail->setBodyText($text);
         } else {
             $mail->setBodyHTML($text);
         }
 
-        $mail->setSubject('=?utf-8?B?'.base64_encode($this->getProcessedTemplateSubject($variables)).'?=');
+        $mail->setSubject('=?utf-8?B?' . base64_encode($this->getProcessedTemplateSubject($variables)) . '?=');
         $mail->setFrom($this->getSenderEmail(), $this->getSenderName());
 
         try {
@@ -80,13 +83,12 @@ class Ibuildings_MageTest_Model_Email_Template extends Mage_Core_Model_Email_Tem
             }
             $mail->send();
             $this->_mail = null;
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->_mail = null;
             Mage::logException($e);
             return false;
         }
 
         return true;
-    }
+    }   
 }
