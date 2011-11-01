@@ -5,7 +5,7 @@
 require_once 'src/app/code/community/Mage/core/Model/App.php';
 // Include Magento from the location on your machine
 // TODO Change to include Mage.php adding it to the include path making to project portable
-require_once '/mnt/hgfs/Sites/magento.development.local/public/app/Mage.php';  
+require_once '/mnt/Sites/magento.development.local/public/app/Mage.php';  
 
 require_once 'src/app/code/community/Mage/Admin/Model/Session.php';
 require_once 'src/app/code/community/Mage/Core/Controller/Varien/Front.php';
