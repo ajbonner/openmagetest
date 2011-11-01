@@ -15,3 +15,6 @@ require_once 'src/lib/Ibuildings/Mage/Controller/Request/HttpTestCase.php';
 require_once 'src/lib/Ibuildings/Mage/Controller/Response/HttpTestCase.php';
 require_once 'src/lib/Ibuildings/Mage/Test/PHPUnit/ControllerTestCase.php';
 require_once 'src/lib/Ibuildings/Mage/Test/PHPUnit/TestCase.php';
+
+// Flush the cache once on execusion rather than on every test
+Mage::app()->getCacheInstance()->flush();
