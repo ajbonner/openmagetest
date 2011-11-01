@@ -35,7 +35,7 @@
     <!-- Generate pmd.xml -->
     <target name="phpmd">
         <exec executable="phpmd">
-            <arg line="src xml codesize,unusedcode               
+            <arg line="src xml codesize,unusedcode
                 --reportfile ${basedir}/build/logs/pmd.xml"/>
         </exec>
     </target>
@@ -48,9 +48,9 @@
     <!-- Generate checkstyle.xml -->
     <target name="phpcs">
         <exec executable="phpcs" output="/dev/null">
-            <arg line="--report=checkstyle               
-                --report-file=${basedir}/build/logs/checkstyle.xml               
-                --standard=Zend               
+            <arg line="--report=checkstyle
+                --report-file=${basedir}/build/logs/checkstyle.xml
+                --standard=Zend
                 src"/>
         </exec>
     </target>
@@ -63,8 +63,8 @@
     <!-- Generate PHP Code_Browser content -->
     <target name="phpcb">
         <exec executable="phpcb">
-            <arg line="--log    ${basedir}/build/logs               
-                --source ${basedir}/MageTest               
+            <arg line="--log    ${basedir}/build/logs
+                --source ${basedir}/MageTest
                 --output ${basedir}/build/code-browser"/>
         </exec>
     </target>
@@ -98,22 +98,22 @@
     <!-- Deploy module files for local testing -->
     <target name="deploy">
         <copy todir="${deploy.dir}/app" overwrite="yes" verbose="yes">
-            <fileset dir="app">
+            <fileset dir="${basedir}/src/app">
                 <exclude name="**/.svn"/>
             </fileset>
         </copy>
         <copy todir="${deploy.dir}/lib" overwrite="yes" verbose="yes">
-            <fileset dir="lib">
+            <fileset dir="${basedir}/src/lib">
                 <exclude name="**/.svn"/>
             </fileset>
         </copy>
         <copy todir="${deploy.dir}/tests" overwrite="yes" verbose="yes">
-            <fileset dir="test">
+            <fileset dir="${basedir}/src/test">
                 <exclude name="**/.svn"/>
             </fileset>
         </copy>
         <copy todir="${deploy.dir}/var" overwrite="yes" verbose="yes">
-            <fileset dir="var">
+            <fileset dir="${basedir}/src/var">
                 <exclude name="**/.svn"/>
             </fileset>
         </copy>
