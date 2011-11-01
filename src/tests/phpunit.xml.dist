@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="tests/bootstrap.php" stopOnFailure="false" colors="false" syntaxCheck="false" verbose="false" processIsolation="false" stderr="true">
+    <testsuite name="Core Tests">
+        <directory suffix="Test.php">app/code/core</directory>
+    </testsuite>
+</phpunit>
