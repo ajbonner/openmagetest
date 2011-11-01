@@ -176,7 +176,7 @@ abstract class Ibuildings_Mage_Test_PHPUnit_ControllerTestCase
     public function mageBootstrap()
     {
         Mage::reset();
-        if (isset($_SERVER['MAGE_IS_DEVELOPER_MODE'])) {
+        if (isset($_SERVER['MAGE_IS_DEVELOPER_MODE']) && $_SERVER['MAGE_IS_DEVELOPER_MODE']) {
             Mage::setIsDeveloperMode(true);
         }
         // Store or website code
