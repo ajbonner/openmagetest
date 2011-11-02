@@ -29,6 +29,7 @@ abstract class Ibuildings_Mage_Test_PHPUnit_TestCase extends PHPUnit_Framework_T
     public function setUp() {
         parent::setUp();
 
-        $this->store = Mage::app()->getStore();
+        $bootstrap = new Ibuildings_MageTest_PHPUnit_Bootstrap;
+        $bootstrap->init();
     }
 }

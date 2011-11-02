@@ -175,20 +175,8 @@ abstract class Ibuildings_Mage_Test_PHPUnit_ControllerTestCase
      */
     public function mageBootstrap()
     {
-        Mage::reset();
-        if (isset($_SERVER['MAGE_IS_DEVELOPER_MODE']) && $_SERVER['MAGE_IS_DEVELOPER_MODE']) {
-            Mage::setIsDeveloperMode(true);
-        }
-        // Store or website code
-        $this->mageRunCode = isset($_SERVER['MAGE_RUN_CODE']) ? $_SERVER['MAGE_RUN_CODE'] : '';
-
-        // Run store or run website
-        $this->mageRunType = isset($_SERVER['MAGE_RUN_TYPE']) ? $_SERVER['MAGE_RUN_TYPE'] : 'store';
-        
-        // Initialize the Mage App and inject the testing request & response
-        Mage::app($this->mageRunCode, $this->mageRunType, $this->options);
-        Mage::app()->setRequest(new Ibuildings_Mage_Controller_Request_HttpTestCase);
-        Mage::app()->setResponse(new Ibuildings_Mage_Controller_Response_HttpTestCase);
+        $bootstrap = new Ibuildings_MageTest_PHPUnit_Bootstrap;
+        $bootstrap->init();
     }
 
     /**
