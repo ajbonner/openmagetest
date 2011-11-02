@@ -51,37 +51,6 @@ class AppTest extends PHPUnit_Framework_TestCase
     } // mageCoreAppHasBeenPatched
     
     /**
-     * mageCoreAppHasSetRequestMethod
-     * @author Alistair Stead
-     * @test
-     */
-    public function mageCoreAppHasSetRequestMethod()
-    {
-        $this->assertTrue( 
-            method_exists($this->_app, 'setRequest'), 
-            "The Mage_Core_Model_App does not have a setRequest method"
-        );
-    } // mageCoreAppHasSetRequestMethod
-    
-    /**
-     * mageCoreAppSetRequestUpdatesInternalRequest
-     * @author Alistair Stead
-     * @depends mageCoreAppHasSetRequestMethod
-     * @test
-     */
-    public function mageCoreAppSetRequestUpdatesInternalRequest()
-    {
-        // Inject an alternate request class
-        $this->_app->setRequest(new Ibuildings_Mage_Controller_Request_HttpTestCase);
-        
-        $this->assertInstanceOf(
-            'Ibuildings_Mage_Controller_Request_HttpTestCase',
-            $this->_app->getRequest(),
-            "The wrong request object is returned"
-        );
-    } // mageCoreAppSetRequestUpdatesInternalRequest
-    
-    /**
      * mageCoreAppGetRequestStillCreatesDependency
      * @author Alistair Stead
      * @test
@@ -94,37 +63,6 @@ class AppTest extends PHPUnit_Framework_TestCase
             "The wrong request object is returned"
         );
     } // mageCoreAppGetRequestStillCreatesDependency
-    
-    /**
-     * mageCoreAppHasSetResponseMethod
-     * @author Alistair Stead
-     * @test
-     */
-    public function mageCoreAppHasSetResponseMethod()
-    {
-        $this->assertTrue( 
-            method_exists($this->_app, 'setResponse'), 
-            "The Mage_Core_Model_App does not have a setResponse method"
-        );
-    } // mageCoreAppHasSetResponseMethod
-    
-    /**
-     * mageCoreAppSetResponseUpdatesInternameResponse
-     * @author Alistair Stead
-     * @depends mageCoreAppHasSetResponseMethod
-     * @test
-     */
-    public function mageCoreAppSetResponseUpdatesInternameResponse()
-    {
-        // Inject an alternate request class
-        $this->_app->setResponse(new Ibuildings_Mage_Controller_Response_HttpTestCase);
-        
-        $this->assertInstanceOf(
-            'Ibuildings_Mage_Controller_Response_HttpTestCase',
-            $this->_app->getResponse(),
-            "The wrong response object is returned"
-        );
-    } // mageCoreAppSetResponseUpdatesInternameResponse
     
     /**
      * mageCoreAppGetResponseStillCreatesDependency
