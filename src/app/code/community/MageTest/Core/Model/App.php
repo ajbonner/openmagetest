@@ -1,0 +1,141 @@
+<?php
+
+/**
+* 
+*/
+class MageTest_Core_Model_App extends Mage_Core_Model_App
+{
+    /**
+     * Dispatched events array
+     *
+     * @var array
+     */
+    protected $_dispatchedEvents = array();
+    
+    /**
+     * Provide a public method to allow the internal Request object
+     * to be set at runtime. This can be used to inject a testing request object
+     *
+     * @return void
+     * @author Alistair Stead
+     **/
+    public function setRequest(Zend_Controller_Request_Abstract $request)
+    {
+        $this->_request = $request;
+    }
+
+    /**
+     * Retrieve request object
+     *
+     * @return Mage_Core_Controller_Request_Http
+     */
+    public function getRequest()
+    {
+        if (empty($this->_request)) {
+            $this->_request = new Mage_Core_Controller_Request_Http();
+        }
+        return $this->_request;
+    }
+    
+    /**
+     * Provide a public method to allow the protected internal Response object
+     * to be set at runtime. This can be used to inject a testing response object
+     *
+     * @return void
+     * @author Alistair Stead
+     **/
+    public function setResponse(Zend_Controller_Response_Abstract $response)
+    {
+        $this->_response = $response;
+    }
+
+    /**
+     * Retrieve response object
+     *
+     * @return Zend_Controller_Response_Http
+     */
+    public function getResponse()
+    {
+        if (empty($this->_response)) {
+            $this->_response = new Mage_Core_Controller_Response_Http();
+            $this->_response->headersSentThrowsException = Mage::$headersSentThrowsException;
+            $this->_response->setHeader("Content-Type", "text/html; charset=UTF-8");
+        }
+        return $this->_response;
+    }
+    
+    /**
+     * Set the mail response object
+     * 
+     * @param Zend_Mail $mail
+     *
+     * @return void
+     * @author Alistair Stead
+     **/
+    public function setResponseEmail(Zend_Mail $mail)
+    {
+        $this->_mail = $mail;
+    }
+    
+    /**
+     * Retrieve the response mail object
+     *
+     * @return Zend_Mail
+     * @author Alistair Stead
+     **/
+    public function getResponseEmail()
+    {
+        if (empty($this->_mail)) {
+            $this->_mail = new Zend_Mail();
+        }
+        return $this->_mail;
+    }
+    
+    /**
+     * Overriden for disabling events
+     * fire during fixutre loading
+     *
+     * (non-PHPdoc)
+     * @see Mage_Core_Model_App::dispatchEvent()
+     */
+    public function dispatchEvent($eventName, $args)
+    {
+        parent::dispatchEvent($eventName, $args);
+
+        if (!isset($this->_dispatchedEvents[$eventName])) {
+            $this->_dispatchedEvents[$eventName] = 0;
+        }
+
+        $this->_dispatchedEvents[$eventName]++;
+
+        return $this;
+    }
+
+
+    /**
+     * Returns number of times when the event was dispatched
+     *
+     * @param string $eventName
+     * @return int
+     */
+    public function getDispatchedEventCount($eventName)
+    {
+        if (isset($this->_dispatchedEvents[$eventName])) {
+            return $this->_dispatchedEvents[$eventName];
+        }
+
+        return 0;
+    }
+
+
+    /**
+     * Resets dispatched events information
+     *
+     * @return EcomDev_PHPUnit_Model_App
+     */
+    public function resetDispatchedEvents()
+    {
+        $this->_dispatchedEvents = array();
+        return $this;
+    }
+}

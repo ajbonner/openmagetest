@@ -11,6 +11,3 @@ $_SERVER['SCRIPT_FILENAME'] = dirname(__FILE__) . DS . 'index.php';
 $_SERVER['MAGE_TEST'] = true;
 // Standard Magento configuration
 $_SERVER['MAGE_IS_DEVELOPER_MODE'] = true;
-
-// Flush the cache once on execusion rather than on every test
-Mage::app()->getCacheInstance()->flush();

@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <MageTest_Core>
+            <version>0.1.12</version>
+            <depends>
+                <Mage_Core />
+            </depends>
+        </MageTest_Core>
+    </modules>
+    <global>
+        <models>
+            <core>
+                <rewrite>
+                    <email_template>MageTest_Core_Model_Email_Template</email_template>
+                </rewrite>
+            </core>
+        </models>
+    </global>
+</config>
