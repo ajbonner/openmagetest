@@ -3,7 +3,7 @@
 /**
 * 
 */
-class MageTest_Core_Model_Admin_Session extends Mage_Core_Model_Session_Abstract
+class MageTest_Core_Model_Admin_Session extends Mage_Admin_Model_Session
 {
     /**
      * Try to login user in admin
@@ -18,12 +18,13 @@ class MageTest_Core_Model_Admin_Session extends Mage_Core_Model_Session_Abstract
         if (empty($username) || empty($password)) {
             return;
         }
-
+        
         try {
             /* @var $user Mage_Admin_Model_User */
             $user = Mage::getModel('admin/user');
             $user->login($username, $password);
             if ($user->getId()) {
+                $this->renewSession();
 
                 if (Mage::getSingleton('adminhtml/url')->useSecretKey()) {
                     Mage::getSingleton('adminhtml/url')->renewSecretUrls();
@@ -32,7 +33,7 @@ class MageTest_Core_Model_Admin_Session extends Mage_Core_Model_Session_Abstract
                 $this->setUser($user);
                 $this->setAcl(Mage::getResourceModel('admin/acl')->loadAcl());
                 if ($requestUri = $this->_getRequestUri($request)) {
-                    Mage::dispatchEvent('admin_session_user_login_success', array('user'=>$user));
+                    Mage::dispatchEvent('admin_session_user_login_success', array('user' => $user));
                     // Patched the redirection to use the Response object
                     $response = Mage::app()->getResponse();
                     $response->setRedirect($requestUri);
@@ -44,7 +45,8 @@ class MageTest_Core_Model_Admin_Session extends Mage_Core_Model_Session_Abstract
             }
         }
         catch (Mage_Core_Exception $e) {
-            Mage::dispatchEvent('admin_session_user_login_failed', array('user_name'=>$username, 'exception' => $e));
+            Mage::dispatchEvent('admin_session_user_login_failed',
+                    array('user_name' => $username, 'exception' => $e));
             if ($request && !$request->getParam('messageSent')) {
                 Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
                 $request->setParam('messageSent', true);
