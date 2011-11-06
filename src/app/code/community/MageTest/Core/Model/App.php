@@ -13,6 +13,21 @@ class MageTest_Core_Model_App extends Mage_Core_Model_App
     protected $_dispatchedEvents = array();
     
     /**
+     * Initialize application front controller
+     *
+     * @return Mage_Core_Model_App
+     */
+    protected function _initFrontController()
+    {
+        $this->_frontController = new MageTest_Core_Controller_Front();
+        Mage::register('controller', $this->_frontController);
+        Varien_Profiler::start('mage::app::init_front_controller');
+        $this->_frontController->init();
+        Varien_Profiler::stop('mage::app::init_front_controller');
+        return $this;
+    }
+    
+    /**
      * Provide a public method to allow the internal Request object
      * to be set at runtime. This can be used to inject a testing request object
      *

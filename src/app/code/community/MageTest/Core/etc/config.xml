@@ -10,11 +10,23 @@
     </modules>
     <global>
         <models>
+            <admin>
+                <rewrite>
+                    <session>MageTest_Core_Model_Admin_Session</session>
+                </rewrite>
+            </admin>
             <core>
                 <rewrite>
                     <email_template>MageTest_Core_Model_Email_Template</email_template>
                 </rewrite>
             </core>
         </models>
+        <helpers>
+            <core>
+                <rewrite>
+                    <http>MageTest_Core_Helper_Http</http>
+                </rewrite>
+            </core>
+        </helpers>
     </global>
 </config>

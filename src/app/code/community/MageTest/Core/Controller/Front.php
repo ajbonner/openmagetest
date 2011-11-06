@@ -15,7 +15,17 @@ class MageTest_Core_Controller_Front extends Mage_Core_Controller_Varien_Front
         if (!Mage::isInstalled() || $request->getPost()) {
             return;
         }
-        if (!Mage::getStoreConfigFlag('web/url/redirect_to_base')) {
+        if (!Mage::getStoreConfig('web/url/redirect_to_base')) {
+            return;
+        }
+
+        $adminPath = (string)Mage::getConfig()->getNode(Mage_Adminhtml_Helper_Data::XML_PATH_CUSTOM_ADMIN_PATH);
+        if (!$adminPath) {
+            $adminPath = (string)Mage::getConfig()
+                ->getNode(Mage_Adminhtml_Helper_Data::XML_PATH_ADMINHTML_ROUTER_FRONTNAME);
+        }
+        if (preg_match('#^' . $adminPath . '(\/.*)?$#', ltrim($request->getPathInfo(), '/'))
+            && (string)Mage::getConfig()->getNode(Mage_Adminhtml_Helper_Data::XML_PATH_USE_CUSTOM_ADMIN_URL)) {
             return;
         }
 
@@ -25,17 +35,21 @@ class MageTest_Core_Controller_Front extends Mage_Core_Controller_Varien_Front
             return;
         }
 
-        $uri = @parse_url($baseUrl);
+        $redirectCode = 302;
+        if (Mage::getStoreConfig('web/url/redirect_to_base') == 301) {
+            $redirectCode = 301;
+        }
+
+        $uri  = @parse_url($baseUrl);
         $host = isset($uri['host']) ? $uri['host'] : '';
         $path = isset($uri['path']) ? $uri['path'] : '';
 
         $requestUri = $request->getRequestUri() ? $request->getRequestUri() : '/';
-        if ($host && $host != $request->getHttpHost() || $path && strpos($requestUri, $path) === false)
-        {
+        if ($host && $host != $request->getHttpHost() || $path && strpos($requestUri, $path) === false) {
             Mage::app()->getFrontController()->getResponse()
-                ->setRedirect($baseUrl)
+                ->setRedirect($baseUrl, $redirectCode)
                 ->sendResponse();
-            //exit;
+            // exit;
         }
     }
 }
