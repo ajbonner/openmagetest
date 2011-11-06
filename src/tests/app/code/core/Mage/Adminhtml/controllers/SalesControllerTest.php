@@ -23,7 +23,6 @@ require_once 'ControllerTestCase.php';
  */
 class Mage_Adminhtml_SalesControllerTest extends Mage_Adminhtml_ControllerTestCase {
 
- 
     /**
      * indexActionListsOrders
      * @author Alistair Stead

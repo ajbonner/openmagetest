@@ -16,7 +16,7 @@
  *
  * @uses Ibuildings_Mage_Test_PHPUnit_ControllerTestCase
  */
-class Mage_Adminhtml_ControllerTestCase extends Ibuildings_Mage_Test_PHPUnit_ControllerTestCase {
+class Mage_Adminhtml_ControllerTestCase extends MageTest_PHPUnit_Framework_ControllerTestCase {
 
     /**
      * Fixture user name

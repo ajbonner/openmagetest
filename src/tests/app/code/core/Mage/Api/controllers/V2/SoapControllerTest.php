@@ -16,7 +16,7 @@
  *
  * @uses PHPUnit_Framework_Magento_TestCase
  */
-class Mage_Api_V2_SoapControllerTest extends Ibuildings_Mage_Test_PHPUnit_ControllerTestCase {
+class Mage_Api_V2_SoapControllerTest extends MageTest_PHPUnit_Framework_ControllerTestCase {
     
     /**
      * theFullAPIV2RouteUsesV2SoapController

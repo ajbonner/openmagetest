@@ -16,7 +16,7 @@
  *
  * @uses PHPUnit_Framework_Magento_TestCase
  */
-class Mage_Cms_IndexControllerTest extends Ibuildings_Mage_Test_PHPUnit_ControllerTestCase {
+class Mage_Cms_IndexControllerTest extends MageTest_PHPUnit_Framework_ControllerTestCase {
 
     /**
      * noRouteShouldSet404Header

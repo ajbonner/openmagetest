@@ -16,7 +16,7 @@
  *
  * @uses PHPUnit_Framework_Magento_TestCase
  */
-class Mage_CatalogSearch_AjaxControllerTest extends Ibuildings_Mage_Test_PHPUnit_ControllerTestCase {
+class Mage_CatalogSearch_AjaxControllerTest extends MageTest_PHPUnit_Framework_ControllerTestCase {
 
     /**
      * suggestActionReturns200

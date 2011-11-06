@@ -16,7 +16,7 @@
  *
  * @uses PHPUnit_Framework_Magento_TestCase
  */
-class Mage_Cms_Helper_PageTest extends Ibuildings_Mage_Test_PHPUnit_ControllerTestCase {
+class Mage_Cms_Helper_PageTest extends MageTest_PHPUnit_Framework_TestCase {
     
     /**
      * Member variable for the Page Helper
