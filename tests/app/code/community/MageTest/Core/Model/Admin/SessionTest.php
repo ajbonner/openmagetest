@@ -41,6 +41,20 @@ class SessionTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * mageAdminSessionHasBeenPatched
+     * @author Alistair Stead
+     * @test
+     */
+    public function mageAdminSessionHasBeenPatched()
+    {
+        $this->assertInstanceOf(
+            'MageTest_Core_Model_Admin_Session', 
+            $this->_session, 
+            "The session is of the wrong class"
+        );
+    } // mageAdminSessionHasBeenPatched
+    
+    /**
      * sessionLoginDoesNotCallCoreHeaderFunction
      * @author Alistair Stead
      * @test

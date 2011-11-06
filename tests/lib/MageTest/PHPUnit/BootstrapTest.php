@@ -57,6 +57,7 @@ class MageTest_PHPUnit_BootstrapTest extends PHPUnit_Framework_TestCase
     public function testAppHasAdditionalMethods() {
         $appReflection = new ReflectionClass(Mage::app());
         $this->assertTrue($appReflection->hasMethod('setRequest'), 'app does not have setRequest method');
+        $this->assertTrue($appReflection->hasMethod('setResponse'), 'app does not have setResponse method');
         
     }
 }
