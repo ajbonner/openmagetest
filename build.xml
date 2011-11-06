@@ -125,7 +125,7 @@
         <symlink overwrite="yes" failonerror="no" link="${deploy.dir}/lib/MageTest" resource="${basedir}/src/lib/MageTest" />
         <mkdir dir="${deploy.dir}/tests/app/code/"/>
         <symlink overwrite="yes" failonerror="no" link="${deploy.dir}/tests/app/code/core" resource="${basedir}/src/tests/app/code/core" />
-        <symlink overwrite="yes" failonerror="no" link="${deploy.dir}/tests/phpunit.xml.dist" resource="${basedir}/src/phpunit.xml.dist" />
+        <symlink overwrite="yes" failonerror="no" link="${deploy.dir}/tests/phpunit.xml.dist" resource="${basedir}/src/tests/phpunit.xml.dist" />
         <mkdir dir="${deploy.dir}/var/connect"/>
         <symlink failonerror="no" link="${deploy.dir}/var/connect/MageTest.xml" resource="${basedir}/var/connect/MageTest.xml" />
     </target>
