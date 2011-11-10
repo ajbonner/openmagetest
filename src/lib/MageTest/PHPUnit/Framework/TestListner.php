@@ -75,7 +75,7 @@ class MageTest_PHPUnit_Framework_TestListener implements PHPUnit_Framework_TestL
     public function startTestSuite(PHPUnit_Framework_TestSuite $suite)
     {
         // Flush the cache once on execusion rather than on every test
-        Mage::app()->getCacheInstance()->flush();
+        MageTest_Util_Cache::flush();
     }
 
     /**

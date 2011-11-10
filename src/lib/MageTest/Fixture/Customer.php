@@ -16,7 +16,7 @@
  * @subpackage Ibuildings_Mage_Test_Factory
  * @author Alistair Stead
  */
-class Ibuildings_Mage_Test_Factory_Customer extends Ibuildings_Mage_Test_Factory
+class MageTest_Fixture_Customer extends MageTest_Fixture
 {
   /**
    * Helper funtion to constuct a customer to be used for testing
@@ -24,7 +24,7 @@ class Ibuildings_Mage_Test_Factory_Customer extends Ibuildings_Mage_Test_Factory
    * @return Mage_Customer_Customer
    * @author Alistair Stead
    **/
-    public static function build(array $data = array())
+    public static function create(array $data = array())
     {
         $_data = array(
             'prefix' => 'Mr',

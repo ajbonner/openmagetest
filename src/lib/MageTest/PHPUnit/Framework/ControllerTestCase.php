@@ -22,25 +22,32 @@ abstract class MageTest_PHPUnit_Framework_ControllerTestCase
 {
     
     /**
+     * undocumented class variable
+     *
+     * @var string
+     **/
+    protected $_bootstrap;
+    
+    /**
      * Internal member variable that will be used to define which store will be used
      *
      * @var string
      **/
-    protected $mageRunCode = '';
+    protected $_mageRunCode = '';
     
     /**
      * Internal member variabe that will be used to define if it is a store or the admin that will run
      *
      * @var string
      **/
-    protected $mageRunType = 'store';
+    protected $_mageRunType = 'store';
     
     /**
      * Internal member variable that will hold the additional options passed to Mage::app()
      *
      * @var array
      **/
-    protected $options = array();
+    protected $_options = array();
     
     /**
      * Internal member variable that will hold any email generated
@@ -110,28 +117,6 @@ abstract class MageTest_PHPUnit_Framework_ControllerTestCase
 
         return null;
     }
-    
-    /**
-     * Enable the Magento cache to speed up the testing
-     *
-     * @return void
-     * @author Alistair Stead
-     */
-    public static function setUpBeforeClass()
-    {
-        // Clear any cache to ensure we testing clean config
-        // self::cleanCache();
-    }
-
-    /**
-     * Clear the magento cache at the end of each test class
-     *
-     * @return void
-     * @author Alistair Stead
-     */
-    public static function tearDownAfterClass()
-    {
-    }
 
     /**
      * Set up Magento app
@@ -142,7 +127,6 @@ abstract class MageTest_PHPUnit_Framework_ControllerTestCase
      */
     protected function setUp()
     {
-        // self::flushCache();
         // Boostrap Magento with testing objects
         $this->mageBootstrap();
     }
@@ -159,8 +143,6 @@ abstract class MageTest_PHPUnit_Framework_ControllerTestCase
         $this->resetSession();
         // Reset any database config after tests have been run
         $this->resetConfig();
-        // Re-initialise the Magento config after any dynamic changes during testing
-        // Mage::getConfig()->reinit();
     }
 
     /**
@@ -175,8 +157,23 @@ abstract class MageTest_PHPUnit_Framework_ControllerTestCase
      */
     public function mageBootstrap()
     {
-        $bootstrap = new MageTest_PHPUnit_Bootstrap;
+        $bootstrap = new MageTest_Bootstrap;
         $bootstrap->init();
+    }
+    
+    /**
+     * undocumented function
+     *
+     * @return void
+     * @author Alistair Stead
+     **/
+    public function getBootstrap()
+    {
+        if (is_null($this->_bootstrap)) {
+            $this->_bootstrap = new MageTest_Bootstrap;
+        }
+        
+        return $this->_bootstrap;
     }
 
     /**
@@ -196,11 +193,11 @@ abstract class MageTest_PHPUnit_Framework_ControllerTestCase
         }
         $request->setPathInfo(null);
         
-        Mage::app()->run(array(
-            'scope_code' => $this->mageRunCode,
-            'scope_type' => $this->mageRunType,
-            'options'    => $this->options,
-        ));
+        $this->getBootstrap()->app()->run(
+            $this->_mageRunCode,
+            $this->_mageRunType,
+            $this->_options
+        );
     }
 
     /**
@@ -248,7 +245,7 @@ abstract class MageTest_PHPUnit_Framework_ControllerTestCase
     public function getFrontController()
     {
         if (null === $this->_frontController) {
-            $this->_frontController = Mage::app()->getFrontController();
+            $this->_frontController = $this->getBootstrap()->app()->getFrontController();
         }
         
         return $this->_frontController;
@@ -262,7 +259,7 @@ abstract class MageTest_PHPUnit_Framework_ControllerTestCase
     public function getRequest()
     {
         if (null === $this->_request) {
-            $this->_request = Mage::app()->getRequest();
+            $this->_request = $this->getBootstrap()->app()->getRequest();
         }
         return $this->_request;
     }
@@ -275,7 +272,7 @@ abstract class MageTest_PHPUnit_Framework_ControllerTestCase
     public function getResponse()
     {
         if (null === $this->_response) {
-            $this->_response = Mage::app()->getResponse();
+            $this->_response = $this->getBootstrap()->app()->getResponse();
         }
         return $this->_response;
     }
@@ -290,7 +287,7 @@ abstract class MageTest_PHPUnit_Framework_ControllerTestCase
     public function getResponseEmail()
     {
         if (null === $this->_mail) {
-            $this->_mail = Mage::app()->getResponseEmail();
+            $this->_mail = $this->getBootstrap()->app()->getResponseEmail();
         }
         return $this->_mail;
     }
@@ -315,7 +312,7 @@ abstract class MageTest_PHPUnit_Framework_ControllerTestCase
      */
     public function resetRequest()
     {
-        if ($this->request instanceof Ibuildings_Mage_Controller_Request_HttpTestCase) {
+        if ($this->request instanceof MageTest_Controller_Request_HttpTestCase) {
             $this->request->clearQuery()
                            ->clearPost();
         }
@@ -411,33 +408,7 @@ abstract class MageTest_PHPUnit_Framework_ControllerTestCase
      **/
     public static function enableCache($types = null)
     {
-        if (is_null($types)) {
-            $ypes = array(
-                'config',
-                'layout',
-                'block_html',
-                'translate',
-                'collections',
-                'eav',
-                'config_api'
-            );
-        }
-        $allTypes = Mage::app()->useCache();
-        $cacheTypes = array();
-        foreach ($types as $type) {
-            $cacheTypes[] = $type->getId();
-        }
-
-        $updatedTypes = 0;
-        foreach ($cacheTypes as $code) {
-            if (empty($allTypes[$code])) {
-                $allTypes[$code] = 1;
-                $updatedTypes++;
-            }
-        }
-        if ($updatedTypes > 0) {
-            Mage::app()->saveUseCache($allTypes);
-        }
+        MageTest_Util_Cache::enable($types);
     }
     
     /**
@@ -448,34 +419,7 @@ abstract class MageTest_PHPUnit_Framework_ControllerTestCase
      **/
     public static function disableCache($types = null)
     {
-        if (is_null($types)) {
-            $ypes = array(
-                'config',
-                'layout',
-                'block_html',
-                'translate',
-                'collections',
-                'eav',
-                'config_api'
-            );
-        }
-        $allTypes = Mage::app()->useCache();
-        $cacheTypes = array();
-        foreach ($types as $type) {
-            $cacheTypes[] = $type->getId();
-        }
-
-        $updatedTypes = 0;
-        foreach ($cacheTypes as $type) {
-            if (!empty($allTypes[$code])) {
-                $allTypes[$code] = 0;
-                $updatedTypes++;
-            }
-            $tags = Mage::app()->getCacheInstance()->cleanType($type);
-        }
-        if ($updatedTypes > 0) {
-            Mage::app()->saveUseCache($allTypes);
-        }
+        MageTest_Util_Cache::disable($types);
     }
     
     /**
@@ -486,23 +430,7 @@ abstract class MageTest_PHPUnit_Framework_ControllerTestCase
      **/
     public static function cleanCache($types = null)
     {
-        if (is_null($types)) {
-            $types = array(
-                'config',
-                'layout',
-                'block_html',
-                'translate',
-                'collections',
-                'eav',
-                'config_api'
-            );
-        }
-        
-        if (!empty($types)) {
-            foreach ($types as $type) {
-                $tags = Mage::app()->getCacheInstance()->cleanType($type);
-            }
-        }
+        MageTest_Util_Cache::clean($types);
     }
     
     /**
@@ -513,7 +441,7 @@ abstract class MageTest_PHPUnit_Framework_ControllerTestCase
      **/
     public static function flushCache()
     {
-        Mage::app()->getCacheInstance()->flush();
+        MageTest_Util_Cache::flush();
     }
     
     /**
@@ -527,34 +455,7 @@ abstract class MageTest_PHPUnit_Framework_ControllerTestCase
      **/
     public function setConfig($path, $value, $scope = null)
     {
-        $configCollection = Mage::getModel('core/config_data')->getCollection();
-            
-        $configCollection->addFieldToFilter('path', array("eq" => $path));
-        if (is_string($scope)) {
-            $configCollection->addFieldToFilter('scope', array("eq" => $scope));
-        }
-        $configCollection->load();
-        
-        // If existing config does not exist create it
-        if (count($configCollection) == 0) {
-            $configData = Mage::getModel('core/config_data');
-            $configData->setPath($path);
-            $configData->setValue($value);
-            // Calculate scope
-            $scope = ($scope)? $scope : 'default';
-            $configData->setScope($scope);
-            $configData->save();
-            $this->_newConfigValues[] = $configData;
-        } 
-        foreach ($configCollection as $config) {
-            $this->_originalConfigValues[] = $config;
-            $config->setValue($value);
-            $config->save();
-        }
-        unset(
-            $configCollection,
-            $configData
-        );
+        MageTest_Util_Config::set($path, $value, $scope = null);
     }
     
     /**

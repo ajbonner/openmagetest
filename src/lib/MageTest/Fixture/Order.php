@@ -16,7 +16,7 @@
  * @subpackage Ibuildings_Mage_Test_Factory
  * @author Alistair Stead
  */
-class Ibuildings_Mage_Test_Factory_Order extends Ibuildings_Mage_Test_Factory
+class MageTest_Fixture_Order extends MageTest_Fixture
 {
     /**
      * Helper funtion to constuct an order to be used for testing
@@ -24,7 +24,7 @@ class Ibuildings_Mage_Test_Factory_Order extends Ibuildings_Mage_Test_Factory
      * @return Mage_Sales_Order
      * @author Alistair Stead
      **/
-    public static function build(array $data = array())
+    public static function create(array $data = array())
     {
         $_data = array(
             'state' => 'processing',

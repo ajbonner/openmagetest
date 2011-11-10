@@ -22,7 +22,7 @@ abstract class MageTest_PHPUnit_Framework_TestCase extends PHPUnit_Framework_Tes
     public function setUp() {
         parent::setUp();
 
-        $bootstrap = new MageTest_PHPUnit_Bootstrap;
+        $bootstrap = new MageTest_Bootstrap;
         $bootstrap->init();
     }
 }

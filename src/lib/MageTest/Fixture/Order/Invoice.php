@@ -16,7 +16,7 @@
  * @subpackage Ibuildings_Mage_Test_Factory
  * @author Alistair Stead
  */
-class Ibuildings_Mage_Test_Factory_Order_Invoice extends Ibuildings_Mage_Test_Factory
+class MageTest_Fixture_Order_Invoice extends MageTest_Fixture
 {
     /**
     * Helper funtion to constuct an invoice to be used for testing
@@ -24,7 +24,7 @@ class Ibuildings_Mage_Test_Factory_Order_Invoice extends Ibuildings_Mage_Test_Fa
     * @return Test_Helper_Order_Invoice
     * @author Alistair Stead
     **/
-    public static function build(array $data = array())
+    public static function create(array $data = array())
     {
         $_data = array(
             'first_name' => 'Fixture',
