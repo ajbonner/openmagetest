@@ -1,7 +1,7 @@
 <?php
 
 class MageTest_Core_Model_Email_TemplateTest extends PHPUnit_Framework_TestCase
-{    
+{
     /**
      * Setup fixtures and dependencies
      *
@@ -15,7 +15,7 @@ class MageTest_Core_Model_Email_TemplateTest extends PHPUnit_Framework_TestCase
         $stub = $this->getMockForAbstractClass('MageTest_PHPUnit_Framework_ControllerTestCase');
         $stub->mageBootstrap();
     }
-    
+
     /**
      * Tear down fixtures and dependencies
      *
@@ -26,7 +26,7 @@ class MageTest_Core_Model_Email_TemplateTest extends PHPUnit_Framework_TestCase
     {
         parent::tearDown();
     }
-    
+
     /**
      * testingEmailTemplateModelShouldBeReturned
      * @author Alistair Stead

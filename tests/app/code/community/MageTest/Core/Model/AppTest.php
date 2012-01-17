@@ -8,7 +8,7 @@ class MageTest_Core_Model_AppTest extends PHPUnit_Framework_TestCase
      * @var Mage_Core_App
      **/
     protected $_app;
-    
+
     /**
      * Setup the dependencies for testing Mage_Core_App
      *
@@ -20,7 +20,7 @@ class MageTest_Core_Model_AppTest extends PHPUnit_Framework_TestCase
         parent::setUp();
         $this->_app = new MageTest_Core_Model_App;
     }
-    
+
     /**
      * Tear down the dependencies and reset state
      *
@@ -35,7 +35,7 @@ class MageTest_Core_Model_AppTest extends PHPUnit_Framework_TestCase
         );
         Mage::reset();
     }
-    
+
     /**
      * mageCoreAppHasBeenPatched
      * @author Alistair Stead
@@ -44,12 +44,12 @@ class MageTest_Core_Model_AppTest extends PHPUnit_Framework_TestCase
     public function mageCoreAppHasBeenPatched()
     {
         $this->assertInstanceOf(
-            'MageTest_Core_Model_App', 
-            $this->_app, 
+            'MageTest_Core_Model_App',
+            $this->_app,
             "The application is of the wrong class"
         );
     } // mageCoreAppHasBeenPatched
-    
+
     /**
      * mageCoreAppGetRequestStillCreatesDependency
      * @author Alistair Stead
@@ -63,7 +63,7 @@ class MageTest_Core_Model_AppTest extends PHPUnit_Framework_TestCase
             "The wrong request object is returned"
         );
     } // mageCoreAppGetRequestStillCreatesDependency
-    
+
     /**
      * mageCoreAppGetResponseStillCreatesDependency
      * @author Alistair Stead
@@ -77,5 +77,5 @@ class MageTest_Core_Model_AppTest extends PHPUnit_Framework_TestCase
             "The wrong response object is returned"
         );
     } // mageCoreAppGetResponseStillCreatesDependency
-    
+
 }

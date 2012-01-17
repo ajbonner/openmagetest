@@ -1,6 +1,6 @@
 <?php
 
-class SessionTest extends PHPUnit_Framework_TestCase 
+class SessionTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Member variable that will hold session object
@@ -8,7 +8,7 @@ class SessionTest extends PHPUnit_Framework_TestCase
      * @var Mage_Admin_Model_Session
      **/
     protected $_session;
-    
+
     /**
      * Setup fixtures and dependencies
      *
@@ -21,10 +21,10 @@ class SessionTest extends PHPUnit_Framework_TestCase
         // Bootstrap Mage in the same way as during testing
         $stub = $this->getMockForAbstractClass('MageTest_PHPUnit_Framework_ControllerTestCase');
         $stub->mageBootstrap();
-        
+
         $this->_session = Mage::getSingleton('admin/session');
     }
-    
+
     /**
      * Tear down fixtures and dependencies
      *
@@ -39,7 +39,7 @@ class SessionTest extends PHPUnit_Framework_TestCase
         );
         Mage::reset();
     }
-    
+
     /**
      * mageAdminSessionHasBeenPatched
      * @author Alistair Stead
@@ -48,12 +48,12 @@ class SessionTest extends PHPUnit_Framework_TestCase
     public function mageAdminSessionHasBeenPatched()
     {
         $this->assertInstanceOf(
-            'MageTest_Core_Model_Admin_Session', 
-            $this->_session, 
+            'MageTest_Core_Model_Admin_Session',
+            $this->_session,
             "The session is of the wrong class"
         );
     } // mageAdminSessionHasBeenPatched
-    
+
     /**
      * sessionLoginDoesNotCallCoreHeaderFunction
      * @author Alistair Stead
@@ -63,7 +63,7 @@ class SessionTest extends PHPUnit_Framework_TestCase
     {
         // Mage_Admin_Model_Session should not call header();
         $this->markTestIncomplete(
-                  'This test has not been implemented yet.'
-                );
+            'This test has not been implemented yet.'
+        );
     } // sessionLoginDoesNotCallCoreHeaderFunction
 }
