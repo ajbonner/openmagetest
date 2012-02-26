@@ -37,7 +37,6 @@ class SessionTest extends PHPUnit_Framework_TestCase
         unset(
             $this->_session
         );
-        Mage::reset();
     }
 
     /**

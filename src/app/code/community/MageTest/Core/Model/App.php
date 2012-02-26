@@ -1,7 +1,7 @@
 <?php
 
 /**
-* 
+*
 */
 class MageTest_Core_Model_App extends Mage_Core_Model_App
 {
@@ -11,7 +11,7 @@ class MageTest_Core_Model_App extends Mage_Core_Model_App
      * @var array
      */
     protected $_dispatchedEvents = array();
-    
+
     /**
      * Initialize application front controller
      *
@@ -26,7 +26,7 @@ class MageTest_Core_Model_App extends Mage_Core_Model_App
         Varien_Profiler::stop('mage::app::init_front_controller');
         return $this;
     }
-    
+
     /**
      * Provide a public method to allow the internal Request object
      * to be set at runtime. This can be used to inject a testing request object
@@ -51,7 +51,7 @@ class MageTest_Core_Model_App extends Mage_Core_Model_App
         }
         return $this->_request;
     }
-    
+
     /**
      * Provide a public method to allow the protected internal Response object
      * to be set at runtime. This can be used to inject a testing response object
@@ -78,10 +78,10 @@ class MageTest_Core_Model_App extends Mage_Core_Model_App
         }
         return $this->_response;
     }
-    
+
     /**
      * Set the mail response object
-     * 
+     *
      * @param Zend_Mail $mail
      *
      * @return void
@@ -91,7 +91,7 @@ class MageTest_Core_Model_App extends Mage_Core_Model_App
     {
         $this->_mail = $mail;
     }
-    
+
     /**
      * Retrieve the response mail object
      *
@@ -105,13 +105,13 @@ class MageTest_Core_Model_App extends Mage_Core_Model_App
         }
         return $this->_mail;
     }
-    
+
     /**
-     * Overriden for disabling events
-     * fire during fixutre loading
+     * Overridden for disabling events
+     * fire during fixture loading
      *
-     * (non-PHPdoc)
      * @see Mage_Core_Model_App::dispatchEvent()
+     * @return MageTest_Core_Model_App
      */
     public function dispatchEvent($eventName, $args)
     {
@@ -138,15 +138,13 @@ class MageTest_Core_Model_App extends Mage_Core_Model_App
         if (isset($this->_dispatchedEvents[$eventName])) {
             return $this->_dispatchedEvents[$eventName];
         }
-
         return 0;
     }
-
 
     /**
      * Resets dispatched events information
      *
-     * @return EcomDev_PHPUnit_Model_App
+     * @return MageTest_Core_Model_App
      */
     public function resetDispatchedEvents()
     {

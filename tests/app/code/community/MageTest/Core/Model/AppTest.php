@@ -1,6 +1,6 @@
 <?php
 
-class MageTest_Core_Model_AppTest extends PHPUnit_Framework_TestCase 
+class MageTest_Core_Model_AppTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Member variable that will hold the Magento Application
@@ -33,7 +33,6 @@ class MageTest_Core_Model_AppTest extends PHPUnit_Framework_TestCase
         unset(
             $this->_app
         );
-        Mage::reset();
     }
 
     /**

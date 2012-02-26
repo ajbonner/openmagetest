@@ -5,8 +5,11 @@ defined('APPLICATION_PATH')
 
 require_once APPLICATION_PATH.'/Mage.php';
 // Update setting so for correct behaviour under test
-$_SERVER['SCRIPT_NAME'] = dirname(__FILE__) . DS . 'index.php';
-$_SERVER['SCRIPT_FILENAME'] = dirname(__FILE__) . DS . 'index.php';
+$_SERVER['SCRIPT_NAME'] = 'index.php';
+$_SERVER['SCRIPT_FILENAME'] = 'index.php';
+$_SESSION = array();
+session_id(uniqid());
+
 // Global scope param to identfy that the application is under test
 $_SERVER['MAGE_TEST'] = true;
 // Standard Magento configuration

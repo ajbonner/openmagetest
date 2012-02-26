@@ -16,21 +16,21 @@
  * @package     MageTest
  */
 class MageTest_Bootstrap {
-    
+
     /**
      * Reflection class of Mage
      *
      * @var string
      **/
     protected $_mageReflection;
-    
+
     /**
      * Reflection class of Mage_Core_Model_App
      *
      * @var ReflectionClass
      **/
     protected $_appReflection;
-    
+
     /**
      * undocumented function
      *
@@ -40,27 +40,15 @@ class MageTest_Bootstrap {
     public function __construct()
     {
         $this->isValid();
-        //         
-        //         if (isset($_SERVER['MAGE_IS_DEVELOPER_MODE']) && $_SERVER['MAGE_IS_DEVELOPER_MODE']) {
-        //             Mage::setIsDeveloperMode(true);
-        //         }
-        // Store or website code
-        // $this->mageRunCode = isset($_SERVER['MAGE_RUN_CODE']) ? $_SERVER['MAGE_RUN_CODE'] : '';
-
-        // Run store or run website
-        // $this->mageRunType = isset($_SERVER['MAGE_RUN_TYPE']) ? $_SERVER['MAGE_RUN_TYPE'] : 'store';
-        
-        // Initialize the Mage App and inject the testing request & response
-        
         $mageReflection = $this->getMageReflection();
         $_app = $mageReflection->getProperty('_app');
         $_app->setAccessible(true);
     }
-    
+
     /**
      * Bootstrap the Mage application in a similar way to the procedure
      * of index.php
-     * 
+     *
      * Then sets test case request and response objects in Mage_Core_App,
      * and disables returning the response.
      *
@@ -79,12 +67,12 @@ class MageTest_Bootstrap {
         } else {
             $this->getProtectedPropertyValue('_app')->init($code, $type, $options);
         }
-        
+
         $app = $this->app();
         $app->setRequest(new MageTest_Controller_Request_HttpTestCase);
         $app->setResponse(new MageTest_Controller_Response_HttpTestCase);
     }
-    
+
     /**
      * undocumented function
      *
@@ -103,14 +91,14 @@ class MageTest_Bootstrap {
             'scope_type' => $type,
             'options'    => $options,
         ));
-        
+
         $app = $this->app();
         $app->setRequest(new MageTest_Controller_Request_HttpTestCase);
         $app->setResponse(new MageTest_Controller_Response_HttpTestCase);
-        
+
         Varien_Profiler::stop('mage');
     }
-    
+
     /**
      * undocumented function
      *
@@ -119,7 +107,7 @@ class MageTest_Bootstrap {
      **/
     public function app($code = '', $type = 'store', $options = array())
     {
-        if (null === $this->getProtectedPropertyValue('_app')) {
+        if (is_null($this->getProtectedPropertyValue('_app'))) {
             Mage::setRoot();
             $this->setProtectedProperty('_app', new MageTest_Core_Model_App());
             $this->setProtectedProperty('_events', new Varien_Event_Collection);
@@ -135,7 +123,7 @@ class MageTest_Bootstrap {
         }
         return $this->getProtectedPropertyValue('_app');
     }
-    
+
     /**
      * undocumented function
      *
@@ -149,7 +137,7 @@ class MageTest_Bootstrap {
         }
         return $this->_appReflection;
     }
-    
+
     /**
      * undocumented function
      *
@@ -163,7 +151,7 @@ class MageTest_Bootstrap {
         }
         return $this->_mageReflection;
     }
-    
+
     /**
      * undocumented function
      *
@@ -176,7 +164,7 @@ class MageTest_Bootstrap {
         $property->setAccessible(true);
         return $property;
     }
-    
+
     /**
      * undocumented function
      *
@@ -187,7 +175,7 @@ class MageTest_Bootstrap {
     {
         return $this->getProtectedProperty($name)->getValue();
     }
-    
+
     /**
      * undocumented function
      *
@@ -199,7 +187,7 @@ class MageTest_Bootstrap {
         $property = $this->getProtectedProperty($name);
         $property->setValue($value);
     }
-    
+
     /**
      * Validate that we are able to run unit tests
      *
@@ -214,13 +202,6 @@ class MageTest_Bootstrap {
                     "MageTest can only function with a PHP version greater than 5.3.x, %s is installed",
                     PHP_VERSION
                 )
-            );
-        }
-
-        if (!Mage::isInstalled()) {
-            exit('Magento Unit Tests can be runned only on installed version');
-            throw new DomainException(
-                'MageTest can only function if Magento is installed'
             );
         }
 
