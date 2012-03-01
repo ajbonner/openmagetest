@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
 <project name="Mage_Test" default="build" basedir=".">
-    <property file="build.default.properties"/>
     <!-- Clean up previous builds -->
     <target name="clean">
         <!-- Clean up -->
@@ -70,6 +69,7 @@
     </target>
     <!-- Prepare files to build the project package -->
     <target name="prepare">
+        <input message="Please the new version number:" addproperty="package.version" />
         <mkdir dir="build"/>
         <replaceregexp file="src/app/code/community/Ibuildings/Test/etc/config.xml" match="(&lt;version&gt;)(.*)(&lt;/version&gt;)" replace="\1${package.version}\3"/>
         <tstamp>
@@ -84,6 +84,7 @@
     </target>
     <!-- Generate Magento Module Package -->
     <target name="package" depends="prepare" description="Creates a Magento PEAR package">
+        <input message="Please the new version number:" addproperty="package.version" />
         <copy file="${basedir}/package.xml" tofile="src/package.xml"/>
         <exec dir="src/" executable="pear">
             <arg value="mpx"/>
@@ -97,6 +98,7 @@
     </target>
     <!-- Deploy module files for local testing -->
     <target name="deploy">
+        <input message="Please enter your target path:" addproperty="deploy.dir" />
         <copy todir="${deploy.dir}/app" overwrite="yes" verbose="yes">
             <fileset dir="${basedir}/src/app">
                 <exclude name="**/.svn"/>
@@ -119,6 +121,7 @@
         </copy>
     </target>
     <target name="symlink">
+        <input message="Please enter your target path:" addproperty="deploy.dir" />
         <mkdir dir="${deploy.dir}/app/code/community/MageTest"/>
         <symlink overwrite="yes" failonerror="no" link="${deploy.dir}/app/code/community/MageTest/Core" resource="${basedir}/src/app/code/community/MageTest/Core" />
         <symlink overwrite="yes" failonerror="no" link="${deploy.dir}/app/etc/modules/MageTest.xml" resource="${basedir}/src/app/etc/modules/MageTest.xml" />
@@ -130,6 +133,7 @@
         <symlink failonerror="no" link="${deploy.dir}/var/connect/MageTest.xml" resource="${basedir}/var/connect/MageTest.xml" />
     </target>
     <target name="remove">
+        <input message="Please enter your target path:" addproperty="deploy.dir" />
         <delete file="${deploy.dir}/app/code/community/MageTest/Core"/>
         <delete file="${deploy.dir}/app/etc/modules/MageTest.xml"/>
         <delete file="${deploy.dir}/lib/MageTest"/>
