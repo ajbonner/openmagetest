@@ -96,52 +96,6 @@
         <delete file="src/package.xml"/>
         <move file="src/${ant.project.name}-${package.version}.tgz" todir="build/"/>
     </target>
-    <!-- Deploy module files for local testing -->
-    <target name="deploy">
-        <input message="Please enter your target path:" addproperty="deploy.dir" />
-        <copy todir="${deploy.dir}/app" overwrite="yes" verbose="yes">
-            <fileset dir="${basedir}/src/app">
-                <exclude name="**/.svn"/>
-            </fileset>
-        </copy>
-        <copy todir="${deploy.dir}/lib" overwrite="yes" verbose="yes">
-            <fileset dir="${basedir}/src/lib">
-                <exclude name="**/.svn"/>
-            </fileset>
-        </copy>
-        <copy todir="${deploy.dir}/tests" overwrite="yes" verbose="yes">
-            <fileset dir="${basedir}/src/test">
-                <exclude name="**/.svn"/>
-            </fileset>
-        </copy>
-        <copy todir="${deploy.dir}/var" overwrite="yes" verbose="yes">
-            <fileset dir="${basedir}/src/var">
-                <exclude name="**/.svn"/>
-            </fileset>
-        </copy>
-    </target>
-    <target name="symlink">
-        <input message="Please enter your target path:" addproperty="deploy.dir" />
-        <mkdir dir="${deploy.dir}/app/code/community/MageTest"/>
-        <symlink overwrite="yes" failonerror="no" link="${deploy.dir}/app/code/community/MageTest/Core" resource="${basedir}/src/app/code/community/MageTest/Core" />
-        <symlink overwrite="yes" failonerror="no" link="${deploy.dir}/app/etc/modules/MageTest.xml" resource="${basedir}/src/app/etc/modules/MageTest.xml" />
-        <symlink overwrite="yes" failonerror="no" link="${deploy.dir}/lib/MageTest" resource="${basedir}/src/lib/MageTest" />
-        <mkdir dir="${deploy.dir}/tests/app/code/"/>
-        <symlink overwrite="yes" failonerror="no" link="${deploy.dir}/tests/app/code/core" resource="${basedir}/src/tests/app/code/core" />
-        <symlink overwrite="yes" failonerror="no" link="${deploy.dir}/tests/phpunit.xml.dist" resource="${basedir}/src/tests/phpunit.xml.dist" />
-        <mkdir dir="${deploy.dir}/var/connect"/>
-        <symlink failonerror="no" link="${deploy.dir}/var/connect/MageTest.xml" resource="${basedir}/var/connect/MageTest.xml" />
-    </target>
-    <target name="remove">
-        <input message="Please enter your target path:" addproperty="deploy.dir" />
-        <delete file="${deploy.dir}/app/code/community/MageTest/Core"/>
-        <delete file="${deploy.dir}/app/etc/modules/MageTest.xml"/>
-        <delete file="${deploy.dir}/lib/MageTest"/>
-        <delete file="${deploy.dir}/tests/app/code/core"/>
-        <delete file="${deploy.dir}/tests/phpunit.xml.dist"/>
-        <delete file="${deploy.dir}/tests/bootstrap.php"/>
-        <delete file="${deploy.dir}/var/connect/MageTest.xml"/>
-    </target>
     <!-- Default build task -->
     <target name="build" depends="clean,parallelTasks,phpunit,phpcb"/>
 </project>

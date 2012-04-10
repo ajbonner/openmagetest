@@ -4,3 +4,4 @@ src/lib/MageTest lib/MageTest
 src/tests/app/code/core tests/app/code/core
 src/tests/phpunit.xml.dist tests/phpunit.xml.dist
 src/var/connect/MageTest.xml var/connect/MageTest.xml
+
