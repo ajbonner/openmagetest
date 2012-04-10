@@ -12,7 +12,13 @@ This allows you to build and run functional controller tests in the same way you
 
 ## Usage
 
+## Feature Request
+
+If you have an idea of how to make this a better project or add functionality that would be of use the community then please [submit a feature request](https://github.com/alistairstead/Mage-Test/issues). Create a new ticket and add the label of 'Feature'.
+
 ## Contributing
+
+Developer IRC channel for MageTest is [#magetest](irc://irc.freenode.net/magetest) on Freenode.
 
 1. [Fork it](https://github.com/alistairstead/Mage-Test/fork_select)
 2. Create your feature branch (`git checkout -b my-new-feature`)
