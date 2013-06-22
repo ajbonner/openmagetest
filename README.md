@@ -33,7 +33,7 @@ Inside your project's composer.json ensure your have at least the following cont
     ],
     "extra":{
         "magento-root-dir": "./"
-    }
+    },
     "config": {
         "bin-dir": "shell"
     },
