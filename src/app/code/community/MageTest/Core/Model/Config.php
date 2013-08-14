@@ -35,7 +35,14 @@ class MageTest_Core_Model_Config extends Mage_Core_Model_Config
      *
      * @var array
      */
-    protected $_mockObject = array();
+    protected $mockObject = array();
+
+    /**
+     * Array of event names that should not be dispatched
+     *
+     * @var string[]
+     */
+    protected $disabledEvents = array();
 
     /**
      * Set a mock object instance for the given model class
@@ -47,7 +54,7 @@ class MageTest_Core_Model_Config extends Mage_Core_Model_Config
      */
     public function setModelInstanceMock($modelClass, $mockObject)
     {
-        $this->_mockObject[$modelClass][] = $mockObject;
+        $this->mockObject[$modelClass][] = $mockObject;
     }
 
     /**
@@ -60,14 +67,14 @@ class MageTest_Core_Model_Config extends Mage_Core_Model_Config
     public function resetMockStack($modelClass = null)
     {
         if (is_null($modelClass)) {
-            $this->_mockObject = array();
+            $this->mockObject = array();
         } else {
-            unset($this->_mockObject[$modelClass]);
+            unset($this->mockObject[$modelClass]);
         }
     }
 
     /**
-     * Over-ride of getModelInstance that will check if a mock object has been provided.
+     * Override of getModelInstance that will check if a mock object has been provided.
      * Mock objects are returned in a queue, until the last object, which will always be returned thereafter.
      *
      * @param string $modelClass
@@ -77,13 +84,50 @@ class MageTest_Core_Model_Config extends Mage_Core_Model_Config
      */
     public function getModelInstance($modelClass = '', $constructArguments = array())
     {
-        if (isset($this->_mockObject[$modelClass])) {
-            if (count($this->_mockObject[$modelClass]) > 1) {
-                return array_shift($this->_mockObject[$modelClass]);
+        if (isset($this->mockObject[$modelClass])) {
+            if (count($this->mockObject[$modelClass]) > 1) {
+                return array_shift($this->mockObject[$modelClass]);
             } else {
-                return $this->_mockObject[$modelClass][0];
+                return $this->mockObject[$modelClass][0];
             }
         }
         return parent::getModelInstance($modelClass, $constructArguments);
+    }
+
+    /**
+     * Add event with name $event to a list of events that should not be dispatched
+     *
+     * @param string $event
+     * @return $this
+     */
+    public function disableEvent($event)
+    {
+        $this->disabledEvents[] = $event;
+        return $this;
+    }
+
+    /**
+     * Remove event with name $event from list of events that should not be dispatched
+
+     * @param string $event
+     * @return $this
+     */
+    public function reenableEvent($event)
+    {
+        if (in_array($event, $this->disabledEvents)) {
+            $this->disabledEvents = array_diff($this->disabledEvents, array($event));
+        }
+
+        return $this;
+    }
+
+    /**
+     * Return a list of event names that should not be dispatched
+     *
+     * @return string[]
+     */
+    public function getDisabledEvents()
+    {
+        return $this->disabledEvents;
     }
 }

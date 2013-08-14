@@ -30,12 +30,20 @@
  */
 abstract class MageTest_PHPUnit_Framework_TestCase extends PHPUnit_Framework_TestCase 
 {
+    static $bootstrapped = false;
+
     public function setUp() 
     {
         parent::setUp();
 
-        $bootstrap = new MageTest_Bootstrap;
+        $bootstrap = new MageTest_Bootstrap();
         $bootstrap->init();
+        if (! self::$bootstrapped) {
+            $bootstrap->app()->loadAreaPart(
+                Mage_Core_Model_App_Area::AREA_GLOBAL,
+                Mage_Core_Model_App_Area::PART_EVENTS
+            );
+        }
     }
 
     /**
