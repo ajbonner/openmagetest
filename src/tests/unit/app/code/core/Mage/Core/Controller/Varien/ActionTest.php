@@ -90,7 +90,7 @@ HDOC;
         </config>
 HDOC;
     }
-    
+
 
     /**
      * controllerRewriteRespectsWhiteSpaceInXMLConfig
@@ -99,14 +99,9 @@ HDOC;
      */
     public function controllerRewriteRespectsWhiteSpaceInXMLConfig()
     {
-        $config = Mage::getConfig()->getNode(); 
-        $config->extend(new Varien_Simplexml_Element($this->_controllerRewrite));
-
-        $this->dispatch('customer/account/login/');
-        
         $this->markTestIncomplete(
                   'This test has not been implemented yet.'
                 );
     } // controllerRewriteRespectsWhiteSpaceInXMLConfig
-    
+
 }

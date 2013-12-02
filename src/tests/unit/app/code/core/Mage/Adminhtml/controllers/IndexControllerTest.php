@@ -1,15 +1,8 @@
 <?php
+
 /**
- * Magento Adminhtml Index Controller tests
- *
- * @package    Mage_Adminhtml
- * @copyright  Copyright (c) 2010 Ibuildings
- * @version    $Id$
+ * @see Mage_Adminhtml_ControllerTestCase
  */
- 
- /**
-  * @see Mage_Adminhtml_ControllerTestCase
-  */
 require_once 'ControllerTestCase.php';
 
 /**
@@ -21,8 +14,8 @@ require_once 'ControllerTestCase.php';
  *
  * @uses Ibuildings_Mage_Test_PHPUnit_ControllerTestCase
  */
-class Mage_Adminhtml_IndexControllerTest extends Mage_Adminhtml_ControllerTestCase {
-
+class Mage_Adminhtml_IndexControllerTest extends Mage_Adminhtml_ControllerTestCase
+{
     /**
      * theAdminRouteAccessesTheAdminApplicationArea
      * @author Alistair Stead
@@ -109,7 +102,7 @@ class Mage_Adminhtml_IndexControllerTest extends Mage_Adminhtml_ControllerTestCa
         $this->dispatch('admin/index/forgotpassword/');
         
         $this->assertQueryCount('li.error-msg', 1);
-        $this->assertQueryContentContains('li.error-msg', 'Cannot find the email address.');
+        $this->assertQueryContentContains('li.error-msg', 'Invalid email address.');
     } // submittingForgotPasswordWithInvalidEmailReturnsError
     
     /**
@@ -125,9 +118,11 @@ class Mage_Adminhtml_IndexControllerTest extends Mage_Adminhtml_ControllerTestCa
             ->setPost(array('email' => $this->email));
             
         $this->dispatch('admin/index/forgotpassword/');
-        
-        $this->assertQueryCount('li.success-msg', 1);
-        $this->assertQueryContentContains('li.success-msg', 'A new password was sent to your email address. Please check your email and click Back to Login.');
+
+        $this->assertRedirect('admin/index/login/');
+
+//        $this->assertQueryCount('li.success-msg', 1);
+//        $this->assertQueryContentContains('li.success-msg', 'A new password was sent to your email address. Please check your email and click Back to Login.');
         // Test that the email contains the correct data
         // $emailContent = $this->getResponseEmail()
         //                     ->getBodyHtml()
@@ -140,7 +135,4 @@ class Mage_Adminhtml_IndexControllerTest extends Mage_Adminhtml_ControllerTestCa
         // // The fixture users password has been changed
         // $this->assertNotQueryContentContains('body', $this->password);
     } // submittingForgotPasswordWithValidEmailReturnsSuccess
-    
-    
-    
 }

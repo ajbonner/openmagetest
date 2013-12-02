@@ -88,7 +88,9 @@ class MageTest_Core_Model_App extends Mage_Core_Model_App
      */
     public function dispatchEvent($eventName, $args)
     {
-        parent::dispatchEvent($eventName, $args);
+        if (! $this->isEventDisabled($eventName)) {
+            parent::dispatchEvent($eventName, $args);
+        }
 
         if (!isset($this->_dispatchedEvents[$eventName])) {
             $this->_dispatchedEvents[$eventName] = 0;
@@ -99,6 +101,14 @@ class MageTest_Core_Model_App extends Mage_Core_Model_App
         return $this;
     }
 
+    /**
+     * @param string $eventName
+     * @return bool
+     */
+    public function isEventDisabled($eventName)
+    {
+        return in_array($eventName, Mage::getConfig()->getDisabledEvents());
+    }
 
     /**
      * Returns number of times when the event was dispatched
