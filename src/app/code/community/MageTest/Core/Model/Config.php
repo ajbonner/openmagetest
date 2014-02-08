@@ -45,6 +45,23 @@ class MageTest_Core_Model_Config extends Mage_Core_Model_Config
     protected $disabledEvents = array();
 
     /**
+     * Flag to disable dispatch of all events
+     *
+     * @var bool
+     */
+    protected $disableAllEvents = false;
+
+    /**
+     * Array of observer names that are permitted to receive events
+     */
+    protected $observerWhitelist = array();
+
+    /**
+     * Array of observer names that are not permitted to receive events
+     */
+    protected $observerBlacklist = array();
+
+    /**
      * Set a mock object instance for the given model class
      *
      * @param string $modelClass
@@ -73,6 +90,51 @@ class MageTest_Core_Model_Config extends Mage_Core_Model_Config
         }
     }
 
+    public function getEventConfig($area, $eventName)
+    {
+        if ($this->disableAllEvents) {
+            return false;
+        }
+
+        $config = parent::getEventConfig($area, $eventName);
+        $observersToRemove = array();
+
+        if ($config && ! empty($this->observerWhitelist)) {
+            foreach ($config->observers->children() as $observerName => $observerConfig) {
+                if (! in_array($observerName, $this->observerWhitelist)) {
+                    $observersToRemove[$observerName] = $observerConfig;
+                }
+            }
+        }
+
+        if ($config && ! empty($this->observerBlacklist)) {
+            foreach ($config->observers->children() as $observerName => $observerConfig) {
+                if (in_array($observerName, $this->observerBlacklist)) {
+                    $observersToRemove[$observerName] = $observerConfig;
+                }
+            }
+        }
+
+        // This is done so laboriously as SimpleXMLElement goes haywire if you loop over its children
+        // and remove any of them at the same time... so do that after working out which ones have to go.
+        foreach ($observersToRemove as $observer) {
+            $this->removeObserverFromEventConfig($observer);
+        }
+
+        return $config;
+    }
+
+    /**
+     * @param SimpleXmlElement $observerConfig
+     * @return $this
+     */
+    protected function removeObserverFromEventConfig($observerConfig)
+    {
+        $dom = dom_import_simplexml($observerConfig);
+        $dom->parentNode->removeChild($dom);
+        return $this;
+    }
+
     /**
      * Override of getModelInstance that will check if a mock object has been provided.
      * Mock objects are returned in a queue, until the last object, which will always be returned thereafter.
@@ -92,6 +154,45 @@ class MageTest_Core_Model_Config extends Mage_Core_Model_Config
             }
         }
         return parent::getModelInstance($modelClass, $constructArguments);
+    }
+
+    /**
+     * @param bool $disableAllEvents
+     * @return $this
+     */
+    public function disableAllEvents($disableAllEvents)
+    {
+        $this->disableAllEvents = $disableAllEvents;
+
+        return $this;
+    }
+
+    /**
+     * @param string $observerName
+     * @return $this
+     */
+    public function whitelistObserver($observerName)
+    {
+        $this->observerWhitelist[] = $observerName;
+
+        if (in_array($observerName, $this->observerBlacklist)) {
+            array_filter($this->observerBlacklist, function($blacklistedObserver) use ($observerName) {
+                return $blacklistedObserver != $observerName;
+            });
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param $observerName
+     * @return $this
+     */
+    public function blacklistObserver($observerName)
+    {
+        $this->observerBlacklist[] = $observerName;
+
+        return $this;
     }
 
     /**
