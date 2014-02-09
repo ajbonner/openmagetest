@@ -32,17 +32,19 @@ abstract class MageTest_PHPUnit_Framework_TestCase extends PHPUnit_Framework_Tes
 {
     static $bootstrapped = false;
 
-    public function setUp() 
+    public function setUp()
     {
         parent::setUp();
 
         $bootstrap = new MageTest_Bootstrap();
         $bootstrap->init();
+
         if (! self::$bootstrapped) {
-            $bootstrap->app()->loadAreaPart(
+            $this->bootstrapEventAreaParts($bootstrap, array(
                 Mage_Core_Model_App_Area::AREA_GLOBAL,
-                Mage_Core_Model_App_Area::PART_EVENTS
-            );
+                Mage_Core_Model_App_Area::AREA_ADMIN,
+                Mage_Core_Model_App_Area::AREA_FRONTEND,
+                Mage_Core_Model_App_Area::AREA_ADMINHTML));
         }
     }
 
@@ -152,5 +154,24 @@ abstract class MageTest_PHPUnit_Framework_TestCase extends PHPUnit_Framework_Tes
             $callOriginalClone,
             $callAutoload
         );
+    }
+
+    /**
+     * Loads events config part for areas included in $areas
+     *
+     * @param MageTest_Bootstrap $bootstrap
+     * @param string[] $areas
+     *
+     * @return MageTest_PHPUnit_Framework_TestCase
+     */
+    protected function bootstrapEventAreaParts($bootstrap, $areas)
+    {
+        foreach ($areas as $area) {
+            $bootstrap->app()->loadAreaPart(
+                $area,
+                Mage_Core_Model_App_Area::PART_EVENTS);
+        }
+
+        return $this;
     }
 }
