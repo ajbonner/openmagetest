@@ -37,10 +37,7 @@ class SessionTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function mageAdminSessionHasBeenPatched()
+    public function testMageAdminSessionHasBeenPatched()
     {
         $this->assertInstanceOf(
             'MageTest_Core_Model_Admin_Session',
@@ -49,10 +46,7 @@ class SessionTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function sessionLoginDoesNotCallCoreHeaderFunction()
+    public function testSessionLoginDoesNotCallCoreHeaderFunction()
     {
         Mage::getModel('admin/session')->login('admin', 'MageTest123');
         $this->assertEmpty(headers_list());

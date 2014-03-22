@@ -39,7 +39,6 @@ class MageTest_PHPUnit_Framework_TestListener implements PHPUnit_Framework_TestL
      */
     public function addError(PHPUnit_Framework_Test $test, Exception $e, $time)
     {
-        
     }
 
     /**
@@ -51,7 +50,6 @@ class MageTest_PHPUnit_Framework_TestListener implements PHPUnit_Framework_TestL
      */
     public function addFailure(PHPUnit_Framework_Test $test, PHPUnit_Framework_AssertionFailedError $e, $time)
     {
-        
     }
 
     /**
@@ -63,7 +61,18 @@ class MageTest_PHPUnit_Framework_TestListener implements PHPUnit_Framework_TestL
      */
     public function addIncompleteTest(PHPUnit_Framework_Test $test, Exception $e, $time)
     {
-        
+    }
+
+    /**
+     * Risky test.
+     *
+     * @param PHPUnit_Framework_Test $test
+     * @param Exception $e
+     * @param float $time
+     * @since  Method available since Release 4.0.0
+     */
+    public function addRiskyTest(PHPUnit_Framework_Test $test, Exception $e, $time)
+    {
     }
 
     /**
@@ -76,7 +85,6 @@ class MageTest_PHPUnit_Framework_TestListener implements PHPUnit_Framework_TestL
      */
     public function addSkippedTest(PHPUnit_Framework_Test $test, Exception $e, $time)
     {
-        
     }
 
     /**
@@ -99,7 +107,6 @@ class MageTest_PHPUnit_Framework_TestListener implements PHPUnit_Framework_TestL
      */
     public function endTestSuite(PHPUnit_Framework_TestSuite $suite)
     {
-        
     }
 
     /**
@@ -109,7 +116,6 @@ class MageTest_PHPUnit_Framework_TestListener implements PHPUnit_Framework_TestL
      */
     public function startTest(PHPUnit_Framework_Test $test)
     {
-        
     }
 
     /**
@@ -120,6 +126,5 @@ class MageTest_PHPUnit_Framework_TestListener implements PHPUnit_Framework_TestL
      */
     public function endTest(PHPUnit_Framework_Test $test, $time)
     {
-        
     }
 }

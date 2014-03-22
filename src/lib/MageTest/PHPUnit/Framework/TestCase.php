@@ -32,20 +32,16 @@ abstract class MageTest_PHPUnit_Framework_TestCase extends PHPUnit_Framework_Tes
 {
     static $bootstrapped = false;
 
+    /**
+     * @var MageTest_Bootstrap
+     */
+    protected $bootstrap;
+
     public function setUp()
     {
         parent::setUp();
 
-        $bootstrap = new MageTest_Bootstrap();
-        $bootstrap->init();
-
-        if (! self::$bootstrapped) {
-            $this->bootstrapEventAreaParts($bootstrap, array(
-                Mage_Core_Model_App_Area::AREA_GLOBAL,
-                Mage_Core_Model_App_Area::AREA_ADMIN,
-                Mage_Core_Model_App_Area::AREA_FRONTEND,
-                Mage_Core_Model_App_Area::AREA_ADMINHTML));
-        }
+        $this->mageBootstrap();
     }
 
     /**
@@ -154,6 +150,35 @@ abstract class MageTest_PHPUnit_Framework_TestCase extends PHPUnit_Framework_Tes
             $callOriginalClone,
             $callAutoload
         );
+    }
+
+    /**
+     * @return MageTest_Bootstrap
+     */
+    public function mageBootstrap()
+    {
+        $_SERVER['MAGE_TEST'] = true;
+
+        $this->bootstrap = new MageTest_Bootstrap();
+        $this->bootstrap->init();
+
+        if (!self::$bootstrapped) {
+            $this->bootstrapEventAreaParts($this->bootstrap, array(
+                Mage_Core_Model_App_Area::AREA_GLOBAL,
+                Mage_Core_Model_App_Area::AREA_ADMIN,
+                Mage_Core_Model_App_Area::AREA_FRONTEND,
+                Mage_Core_Model_App_Area::AREA_ADMINHTML));
+        }
+
+        return $this->bootstrap;
+    }
+
+    /**
+     * @return MageTest_Bootstrap
+     */
+    public function getBootstrap()
+    {
+        return $this->bootstrap;
     }
 
     /**

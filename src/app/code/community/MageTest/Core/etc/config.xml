@@ -18,6 +18,7 @@
             <core>
                 <rewrite>
                     <email_template>MageTest_Core_Model_Email_Template</email_template>
+                    <email>MageTest_Core_Model_Email</email>
                 </rewrite>
             </core>
         </models>
