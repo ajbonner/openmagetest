@@ -2,12 +2,6 @@
 
 class MageTest_Core_Model_Email_TemplateTest extends PHPUnit_Framework_TestCase
 {
-    /**
-     * Setup fixtures and dependencies
-     *
-     * @return void
-     * @author Alistair Stead
-     **/
     public function setUp()
     {
         parent::setUp();
@@ -16,28 +10,40 @@ class MageTest_Core_Model_Email_TemplateTest extends PHPUnit_Framework_TestCase
         $stub->mageBootstrap();
     }
 
-    /**
-     * Tear down fixtures and dependencies
-     *
-     * @return void
-     * @author Alistair Stead
-     **/
-    public function tearDown()
-    {
-        parent::tearDown();
-    }
-
-    /**
-     * testingEmailTemplateModelShouldBeReturned
-     * @author Alistair Stead
-     * @test
-     */
-    public function testingEmailTemplateModelShouldBeReturned()
+    public function testEmailTemplateModelShouldBeReturned()
     {
         $this->assertInstanceOf(
             'MageTest_Core_Model_Email_Template',
             Mage::getModel('core/email_template'),
             "MageTest_Core_Model_Email_Template was not returned as expected"
         );
-    } // testingEmailTemplateModelShouldBeReturned
+    }
+
+    public function testTemplateEmailsAreCaughtAndStoredInAppModelForInspection()
+    {
+        $mailer = Mage::getModel('core/email_template');
+        $message = 'Hello, world!';
+
+        $mail = $this->sendTemplateEmailMessage($mailer, $message);
+        $this->assertEquals($message, $mail->getBodyText(true));
+    }
+
+    /**
+     * @param Mage_Core_Model_Email_Template $mailer
+     * @param string $message
+     * @return Zend_Mail
+     */
+    protected function sendTemplateEmailMessage($mailer, $message)
+    {
+        $mailer->setSenderName('Mage Test')
+            ->setTemplateText($message)
+            ->setSenderEmail('baz@qux.co.uk')
+            ->setTemplateSubject('Testing 123')
+            ->setTemplateType(Mage_Core_Model_Email_Template::TYPE_TEXT)
+            ->send('foo@bar.com', 'Foo Bar', array());
+
+        $mail = Mage::app()->getResponseEmail();
+
+        return $mail;
+    }
 }

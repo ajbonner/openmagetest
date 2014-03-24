@@ -31,7 +31,6 @@
 abstract class MageTest_PHPUnit_Framework_ControllerTestCase
    extends Zend_Test_PHPUnit_ControllerTestCase
 {
-    
     /**
      * undocumented class variable
      *
@@ -168,6 +167,8 @@ abstract class MageTest_PHPUnit_Framework_ControllerTestCase
      */
     public function mageBootstrap()
     {
+        $_SERVER['MAGE_TEST'] = true;
+
         $bootstrap = new MageTest_Bootstrap;
         $bootstrap->init();
     }
