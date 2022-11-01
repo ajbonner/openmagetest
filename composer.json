@@ -10,11 +10,14 @@
     "repositories": [
         {
             "type": "composer",
-            "url": "http://packages.firegento.com"
+            "url": "https://packages.firegento.com"
         }
     ],
     "config": {
-        "bin-dir": "bin"
+        "bin-dir": "bin",
+        "allow-plugins": {
+            "magento-hackathon/magento-composer-installer": true
+        }
     },
     "extra": {
         "magento-root-dir": "./"
