@@ -1,6 +1,6 @@
 .DS_Store
 .phpunit.result.cache
-build/*
+/build/*
 .idea
 tags
 /vendor
@@ -8,4 +8,4 @@ composer.lock
 /public
 /bin/
 !/bin/ci.sh
-/magento-root
+

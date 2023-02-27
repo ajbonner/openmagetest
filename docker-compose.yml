@@ -31,7 +31,7 @@ services:
     environment:
       - NGINX_HOST=_
       - NGINX_PORT=80
-      - NGINX_ROOT=/srv/magetest/magento-root
+      - NGINX_ROOT=/srv/magetest/build/openmage
       - NGINX_PROXY=php:9000
     depends_on:
       - php
@@ -41,18 +41,9 @@ services:
       - ./:/srv/magetest
     restart: "no"
     environment:
-      - OPENMAGE_ROOT=/srv/magetest/magento-root
+      - OPENMAGE_ROOT=/srv/magetest/build/openmage
       - OPENMAGE_VERSION=v20.0.20
     depends_on:
       - php
     entrypoint: ['/usr/bin/env', 'bash', '-c', '/srv/magetest/docker/setup.sh']
-  magetest_test:
-    image: php:8.2-fpm
-    volumes:
-      - ./:/srv/magetest
-    restart: "no"
-    environment:
-      - OPENMAGE_ROOT=/srv/magetest/magento-root
-    depends_on:
-      - php
-#    entrypoint: ['/usr/bin/env', 'bash', '-c', 'cd /srv/magetest/magento-root && ./vendor/bin/phpunit']
+
