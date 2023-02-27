@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="bootstrap.php" stopOnFailure="false" colors="false" syntaxCheck="false" verbose="false" processIsolation="false" stderr="true">
-    <testsuite name="Core Tests">
-        <directory suffix="Test.php">core/unit/app/code/core</directory>
-    </testsuite>
-    <testsuite name="MageTest Framework Tests">
-        <directory suffix="Test.php">magetest/unit/app/code/community/MageTest</directory>
-        <directory suffix="Test.php">magetest/unit/lib/MageTest</directory>
-    </testsuite>
+<phpunit bootstrap="bootstrap.php" stopOnFailure="false" colors="false" verbose="false" processIsolation="false" stderr="true">
+    <testsuites>
+        <testsuite name="Core Tests">
+            <directory suffix="Test.php">core/unit/app/code/core</directory>
+        </testsuite>
+        <testsuite name="MageTest Framework Tests">
+            <directory suffix="Test.php">magetest/unit/app/code/community/MageTest</directory>
+            <directory suffix="Test.php">magetest/unit/lib/MageTest</directory>
+        </testsuite>
+    </testsuites>
     <listeners>
         <listener class="MageTest_PHPUnit_Framework_TestListener"/>
     </listeners>
