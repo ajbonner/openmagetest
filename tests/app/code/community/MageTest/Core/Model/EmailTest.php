@@ -1,8 +1,10 @@
 <?php
 
-class MageTest_Core_Model_EmailTest extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class MageTest_Core_Model_EmailTest extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         // Bootstrap Mage in the same way as during testing

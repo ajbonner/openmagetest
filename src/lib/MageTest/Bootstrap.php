@@ -28,7 +28,7 @@
  *
  * @author     MageTest team (https://github.com/MageTest/Mage-Test/contributors)
  */
-class MageTest_Bootstrap 
+class MageTest_Bootstrap
 {
     /**
      * Reflection class of Mage
@@ -85,8 +85,8 @@ class MageTest_Bootstrap
         }
 
         $app = $this->app();
-        $app->setRequest(new MageTest_Controller_Request_HttpTestCase);
-        $app->setResponse(new MageTest_Controller_Response_HttpTestCase);
+        $app->setRequest(new MageTest_Controller_Request_HttpTestCase());
+        $app->setResponse(new MageTest_Controller_Response_HttpTestCase());
     }
 
     /**
@@ -112,8 +112,8 @@ class MageTest_Bootstrap
         ));
 
         $app = $this->app();
-        $app->setRequest(new MageTest_Controller_Request_HttpTestCase);
-        $app->setResponse(new MageTest_Controller_Response_HttpTestCase);
+        $app->setRequest(new MageTest_Controller_Request_HttpTestCase());
+        $app->setResponse(new MageTest_Controller_Response_HttpTestCase());
 
         Varien_Profiler::stop('mage');
     }
@@ -132,7 +132,7 @@ class MageTest_Bootstrap
         if (is_null($this->getProtectedPropertyValue('_app'))) {
             Mage::setRoot();
             $this->setProtectedProperty('_app', new MageTest_Core_Model_App());
-            $this->setProtectedProperty('_events', new Varien_Event_Collection);
+            $this->setProtectedProperty('_events', new Varien_Event_Collection());
             $this->setProtectedProperty('_config', new MageTest_Core_Model_Config($options));
 
             Varien_Profiler::start('self::app::init');

@@ -1,13 +1,13 @@
 <?php
 
-class MageTest_PHPUnit_Framework_TestCaseTest 
-    extends MageTest_PHPUnit_Framework_TestCase
+class MageTest_PHPUnit_Framework_TestCaseTest extends MageTest_PHPUnit_Framework_TestCase
 {
     public function testMocksModel()
     {
         $this->assertInstanceOf(
             'Mage_Sales_Model_Order',
-            $this->getModelMock('sales/order'));
+            $this->getModelMock('sales/order')
+        );
     }
 
     public function testMocksResourceModel()

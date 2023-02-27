@@ -1,6 +1,8 @@
 <?php
 
-class MageTest_Core_Model_AppTest extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class MageTest_Core_Model_AppTest extends TestCase
 {
     /**
      * Member variable that will hold the Magento Application
@@ -14,7 +16,7 @@ class MageTest_Core_Model_AppTest extends PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->_app = new MageTest_Core_Model_App();
@@ -25,7 +27,7 @@ class MageTest_Core_Model_AppTest extends PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
         unset(

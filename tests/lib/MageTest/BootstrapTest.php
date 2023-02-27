@@ -1,6 +1,8 @@
 <?php
 
-class MageTest_BootstrapTest extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class MageTest_BootstrapTest extends TestCase
 {
     /**
      * Internal member variable of the bootstrap under test
@@ -14,7 +16,7 @@ class MageTest_BootstrapTest extends PHPUnit_Framework_TestCase
      *
      * @return void
      **/
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         // Bootstrap Mage in the same way as during testing
@@ -26,7 +28,7 @@ class MageTest_BootstrapTest extends PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->_bootstrap);
         parent::tearDown();

@@ -20,111 +20,123 @@
  * @copyright  Copyright (c) 2012-2013 MageTest team and contributors.
  */
 
+use PHPUnit\Framework\Test;
+use PHPUnit\Framework\TestListener;
+use PHPUnit\Framework\AssertionFailedError;
+use PHPUnit\Framework\TestSuite;
+use PHPUnit\Framework\Warning;
+
 /**
- * MageTest_PHPUnit_Framework_TestListener
+ * MageTest_TestListener
  *
  * @category   MageTest
  * @package    Mage-Test_MagentoExtension
  *
  * @author     MageTest team (https://github.com/MageTest/Mage-Test/contributors)
  */
-class MageTest_PHPUnit_Framework_TestListener implements PHPUnit_Framework_TestListener 
+class MageTest_PHPUnit_Framework_TestListener implements TestListener
 {
     /**
      * An error occurred.
      *
-     * @param  PHPUnit_Framework_Test $test
-     * @param  Exception              $e
+     * @param  Test $test
+     * @param  Throwable              $t
      * @param  float                  $time
      */
-    public function addError(PHPUnit_Framework_Test $test, Exception $e, $time)
+    public function addError(Test $test, Throwable $t, $time): void
     {
     }
 
     /**
      * A failure occurred.
      *
-     * @param  PHPUnit_Framework_Test                 $test
-     * @param  PHPUnit_Framework_AssertionFailedError $e
-     * @param  float                                  $time
+     * @param  Test                 $test
+     * @param  AssertionFailedError $e
+     * @param  float                $time
      */
-    public function addFailure(PHPUnit_Framework_Test $test, PHPUnit_Framework_AssertionFailedError $e, $time)
+    public function addFailure(Test $test, AssertionFailedError $e, $time): void
     {
+    }
+
+
+    public function addWarning(Test $test, Warning $e, float $time): void
+    {
+        // TODO: Implement addWarning() method.
     }
 
     /**
      * Incomplete test.
      *
-     * @param  PHPUnit_Framework_Test $test
-     * @param  Exception              $e
+     * @param  Test $test
+     * @param  Throwable              $t
      * @param  float                  $time
      */
-    public function addIncompleteTest(PHPUnit_Framework_Test $test, Exception $e, $time)
+    public function addIncompleteTest(Test $test, \Throwable $t, $time): void
     {
     }
 
     /**
      * Risky test.
      *
-     * @param PHPUnit_Framework_Test $test
-     * @param Exception $e
+     * @param Test $test
+     * @param Throwable $t
      * @param float $time
      * @since  Method available since Release 4.0.0
      */
-    public function addRiskyTest(PHPUnit_Framework_Test $test, Exception $e, $time)
+    public function addRiskyTest(Test $test, Throwable $t, $time): void
     {
     }
 
     /**
      * Skipped test.
      *
-     * @param  PHPUnit_Framework_Test $test
-     * @param  Exception              $e
+     * @param  Test $test
+     * @param  Throwable              $t
      * @param  float                  $time
      * @since  Method available since Release 3.0.0
      */
-    public function addSkippedTest(PHPUnit_Framework_Test $test, Exception $e, $time)
+    public function addSkippedTest(Test $test, Throwable $t, $time): void
     {
     }
 
     /**
      * A test suite started.
      *
-     * @param  PHPUnit_Framework_TestSuite $suite
+     * @param  TestSuite $suite
      * @since  Method available since Release 2.2.0
      */
-    public function startTestSuite(PHPUnit_Framework_TestSuite $suite)
+    public function startTestSuite(TestSuite $suite): void
     {
-        // Flush the cache once on execusion rather than on every test
+        // Flush the cache once on execution rather than on every test
         MageTest_Util_Cache::flush();
     }
 
     /**
      * A test suite ended.
      *
-     * @param  PHPUnit_Framework_TestSuite $suite
+     * @param  TestSuite $suite
      * @since  Method available since Release 2.2.0
      */
-    public function endTestSuite(PHPUnit_Framework_TestSuite $suite)
+    public function endTestSuite(TestSuite $suite): void
     {
     }
 
     /**
      * A test started.
      *
-     * @param  PHPUnit_Framework_Test $test
+     * @param  Test $test
      */
-    public function startTest(PHPUnit_Framework_Test $test)
+    public function startTest(Test $test): void
     {
     }
 
     /**
      * A test ended.
      *
-     * @param  PHPUnit_Framework_Test $test
+     * @param  Test $test
      * @param  float                  $time
      */
-    public function endTest(PHPUnit_Framework_Test $test, $time)
+    public function endTest(Test $test, $time): void
     {
     }
 }

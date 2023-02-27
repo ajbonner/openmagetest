@@ -66,10 +66,10 @@ class Mage_Adminhtml_ControllerTestCase extends MageTest_PHPUnit_Framework_Contr
      * @return void
      * @author Alistair Stead
      **/
-    public function setup()
+    public function setup(): void
     {
         parent::setup();
-        
+
         // Build some fuxture values
         $this->userName = 'fixture';
         $this->firstName = 'Test';
@@ -78,16 +78,16 @@ class Mage_Adminhtml_ControllerTestCase extends MageTest_PHPUnit_Framework_Contr
         $this->password = '123123';
         $this->roleName = 'Fixture';
         // Generate the fixture
-        $this->createAdminUserFixture();        
+        $this->createAdminUserFixture();
     }
-    
+
     /**
      * Tear down the fixtures for the Adminhtml module tests
      *
      * @return void
      * @author Alistair Stead
      **/
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->deleteAdminUserFixture();
     }
@@ -172,7 +172,7 @@ class Mage_Adminhtml_ControllerTestCase extends MageTest_PHPUnit_Framework_Contr
         } catch (Exception $e) {
             echo "Unable to create fixture :: {$e->getMessage()}";
         }
-        
+
     }
 
     /**
@@ -192,7 +192,7 @@ class Mage_Adminhtml_ControllerTestCase extends MageTest_PHPUnit_Framework_Contr
                 $user->delete();
             }
         }
-        
+
         if ($this->roleName) {
             $roles = Mage::getModel('api/roles')->getCollection();
             $roles->addFieldToFilter('role_name', array('eq' => $this->roleName));

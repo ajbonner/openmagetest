@@ -1,9 +1,11 @@
-DS_Store
+.DS_Store
+.phpunit.result.cache
 build/*
 .idea
 tags
 /vendor
 composer.lock
 /public
-/bin/modman
-/bin/magerun.phar
+/bin/
+!/bin/ci.sh
+/magento-root

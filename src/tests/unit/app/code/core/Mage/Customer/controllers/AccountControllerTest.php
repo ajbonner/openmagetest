@@ -20,7 +20,6 @@ class Mage_Customer_AccountControllerTest extends MageTest_PHPUnit_Framework_Con
 
     /**
      * indexActionIsSecureAndRequiresLogin
-     * @author Alistair Stead
      * @test
      */
     public function indexActionIsSecureAndRequiresLogin()
@@ -30,7 +29,7 @@ class Mage_Customer_AccountControllerTest extends MageTest_PHPUnit_Framework_Con
                   'This test has not been implemented yet.'
                 );
     } // indexActionIsSecureAndRequiresLogin
-    
+
     /**
      * indexActionReturnsDashboardToLoggedInUser
      * @author Alistair Stead
@@ -46,8 +45,8 @@ class Mage_Customer_AccountControllerTest extends MageTest_PHPUnit_Framework_Con
                   'This test has not been implemented yet.'
                 );
     } // indexActionReturnsDashboardToLoggedInUser
-    
-    
+
+
     /**
      * Internal helper method to streamline the process of user login
      *

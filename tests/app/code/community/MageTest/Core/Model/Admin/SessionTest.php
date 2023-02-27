@@ -1,6 +1,8 @@
 <?php
 
-class SessionTest extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class SessionTest extends TestCase
 {
     /**
      * Member variable that will hold session object
@@ -14,7 +16,7 @@ class SessionTest extends PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         // Bootstrap Mage in the same way as during testing
@@ -29,7 +31,7 @@ class SessionTest extends PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
         unset(

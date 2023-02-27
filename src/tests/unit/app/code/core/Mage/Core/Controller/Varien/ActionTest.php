@@ -17,7 +17,7 @@
  * @uses PHPUnit_Framework_Magento_TestCase
  */
 class Mage_CoreController_Varien_ActionTests extends MageTest_PHPUnit_Framework_ControllerTestCase {
-    
+
     /**
      * undocumented class variable
      *
@@ -36,9 +36,8 @@ class Mage_CoreController_Varien_ActionTests extends MageTest_PHPUnit_Framework_
      * Setup a dependencies and fixtures
      *
      * @return void
-     * @author Alistair Stead
      **/
-    public function setUp()
+    public function setUp(): void
     {
         $this->_controllerRewrite = <<<HDOC
         <config>

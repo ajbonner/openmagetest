@@ -20,6 +20,12 @@
  * @copyright  Copyright (c) 2012-2013 MageTest team and contributors.
  */
 
+/** @deprecated temporary class aliases while we wait for zf1future to come up with a migration strategy for zend_test_phpunit */
+class_alias(\PHPUnit\Framework\ExpectationFailedException::class, 'PHPUnit_Framework_ExpectationFailedException');
+class_alias(\PHPUnit\Framework\TestCase::class, 'PHPUnit_Framework_TestCase');
+class_alias(\PHPUnit\Framework\Constraint\Constraint::class, 'PHPUnit_Framework_Constraint');
+class_alias(\PHPUnit\Runner\Version::class, 'PHPUnit_Runner_Version');
+
 /**
  * MageTest_PHPUnit_Framework_ControllerTestCase
  *
@@ -37,28 +43,28 @@ abstract class MageTest_PHPUnit_Framework_ControllerTestCase
      * @var string
      */
     protected $_bootstrap;
-    
+
     /**
      * Internal member variable that will be used to define which store will be used
      *
      * @var string
      */
     protected $_mageRunCode = '';
-    
+
     /**
      * Internal member variabe that will be used to define if it is a store or the admin that will run
      *
      * @var string
      */
     protected $_mageRunType = 'store';
-    
+
     /**
      * Internal member variable that will hold the additional options passed to Mage::app()
      *
      * @var array
      */
     protected $_options = array();
-    
+
     /**
      * Internal member variable that will hold any email generated
      * during the request / response with the controller
@@ -66,28 +72,28 @@ abstract class MageTest_PHPUnit_Framework_ControllerTestCase
      * @var Zend_Mail
      */
     protected $_mail;
-    
+
     /**
      * Internal registry of the original config values.
      *
      * @var array
      */
     protected $_originalConfigValues = array();
-    
+
     /**
      * Internal registry of the new config values.
      *
      * @var array
      */
     protected $_newConfigValues = array();
-    
+
     /**
      * Internal registry of the removed config values.
      *
      * @var array
      */
     protected $_removedConfigValues = array();
-    
+
     /**
      * Overloading: prevent overloading to special properties
      *
@@ -136,19 +142,19 @@ abstract class MageTest_PHPUnit_Framework_ControllerTestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         // Boostrap Magento with testing objects
         $this->mageBootstrap();
     }
-    
+
     /**
      * Teardown the modifications to the Mage App and Config
      *
      * @return void
      * @author Alistair Stead
      **/
-    protected function tearDown()
+    protected function tearDown(): void
     {
         // Reset Sessions and Cookies
         $this->resetSession();
@@ -159,7 +165,7 @@ abstract class MageTest_PHPUnit_Framework_ControllerTestCase
     /**
      * Bootstrap the Mage application in a similar way to the procedure
      * of index.php
-     * 
+     *
      * Then sets test case request and response objects in Mage_Core_App,
      * and disables returning the response.
      *
@@ -169,10 +175,10 @@ abstract class MageTest_PHPUnit_Framework_ControllerTestCase
     {
         $_SERVER['MAGE_TEST'] = true;
 
-        $bootstrap = new MageTest_Bootstrap;
+        $bootstrap = new MageTest_Bootstrap();
         $bootstrap->init();
     }
-    
+
     /**
      * undocumented function
      *
@@ -183,7 +189,7 @@ abstract class MageTest_PHPUnit_Framework_ControllerTestCase
         if (is_null($this->_bootstrap)) {
             $this->_bootstrap = new MageTest_Bootstrap;
         }
-        
+
         return $this->_bootstrap;
     }
 
@@ -203,7 +209,7 @@ abstract class MageTest_PHPUnit_Framework_ControllerTestCase
             $request->setRequestUri($url);
         }
         $request->setPathInfo(null);
-        
+
         $this->getBootstrap()->app()->run(
             $this->_mageRunCode,
             $this->_mageRunType,
@@ -213,12 +219,12 @@ abstract class MageTest_PHPUnit_Framework_ControllerTestCase
 
     /**
      * Reset Application state
-     * 
+     *
      * Reset methos can be used between dispatch requests allowing you to
      * build user journeys through the application and make assertions
      * against the reponse at each stage.
-     * 
-     * Dispatch your requests, make assertions and then call reset before the 
+     *
+     * Dispatch your requests, make assertions and then call reset before the
      * next dispatch call.
      *
      * Creates new request/response objects, resets Mage and globals
@@ -235,7 +241,7 @@ abstract class MageTest_PHPUnit_Framework_ControllerTestCase
         $this->resetResponseMail();
         $this->mageBootstrap();
     }
-    
+
     /**
      * Reset the browser session and cookies
      *
@@ -257,7 +263,7 @@ abstract class MageTest_PHPUnit_Framework_ControllerTestCase
         if (null === $this->_frontController) {
             $this->_frontController = $this->getBootstrap()->app()->getFrontController();
         }
-        
+
         return $this->_frontController;
     }
 
@@ -286,7 +292,7 @@ abstract class MageTest_PHPUnit_Framework_ControllerTestCase
         }
         return $this->_response;
     }
-    
+
     /**
      * Retrieve any emails that would have been sent
      * by Magento during execution of the request
@@ -300,7 +306,7 @@ abstract class MageTest_PHPUnit_Framework_ControllerTestCase
         }
         return $this->_mail;
     }
-    
+
     /**
      * Reset the responseMail generated during the request & response
      *
@@ -310,7 +316,7 @@ abstract class MageTest_PHPUnit_Framework_ControllerTestCase
     {
         $this->_mail = null;
     }
-    
+
     /**
      * Reset the request object
      *
@@ -343,7 +349,7 @@ abstract class MageTest_PHPUnit_Framework_ControllerTestCase
         $this->_response = null;
         return $this;
     }
-    
+
     /**
      * Assert that the specified route was used
      *
@@ -365,7 +371,7 @@ abstract class MageTest_PHPUnit_Framework_ControllerTestCase
             $this->fail($msg);
         }
     }
-    
+
     /**
      * Assert that the route matched is NOT as specified
      *
@@ -384,7 +390,7 @@ abstract class MageTest_PHPUnit_Framework_ControllerTestCase
             $this->fail($msg);
         }
     }
-    
+
     /**
      * Assert that the last handled request used the given module
      *
@@ -406,8 +412,8 @@ abstract class MageTest_PHPUnit_Framework_ControllerTestCase
             $this->fail($msg);
         }
     }
-    
-    
+
+
     /**
      * Enable the Magento cache
      *
@@ -418,7 +424,7 @@ abstract class MageTest_PHPUnit_Framework_ControllerTestCase
     {
         MageTest_Util_Cache::enable($types);
     }
-    
+
     /**
      * Disable the Magento cache
      *
@@ -429,7 +435,7 @@ abstract class MageTest_PHPUnit_Framework_ControllerTestCase
     {
         MageTest_Util_Cache::disable($types);
     }
-    
+
     /**
      * Clear the Magento cache
      *
@@ -440,7 +446,7 @@ abstract class MageTest_PHPUnit_Framework_ControllerTestCase
     {
         MageTest_Util_Cache::clean($types);
     }
-    
+
     /**
      * Entirely flush the cache within the system
      *
@@ -450,10 +456,10 @@ abstract class MageTest_PHPUnit_Framework_ControllerTestCase
     {
         MageTest_Util_Cache::flush();
     }
-    
+
     /**
      * Set an internal config value for Magento
-     * 
+     *
      * Orginal values will be stores internally and then restored after
      * all tests have been run with resetConfig().
      *
@@ -466,10 +472,10 @@ abstract class MageTest_PHPUnit_Framework_ControllerTestCase
     {
         MageTest_Util_Config::set($path, $value, $scope = null);
     }
-    
+
     /**
      * Remove an internal config value from Magento
-     * 
+     *
      * This mimics the fucntionality of the admin when you set a yes|no option
      * to no. Orginal values will be stores internally and then restored after
      * all tests have been run with resetConfig().
@@ -480,19 +486,19 @@ abstract class MageTest_PHPUnit_Framework_ControllerTestCase
      */
     public function removeConfig($path, $scope = null)
     {
-        $configCollection = Mage::getModel('core/config_data')->getCollection();  
+        $configCollection = Mage::getModel('core/config_data')->getCollection();
         $configCollection->addFieldToFilter('path', array("eq" => $path));
         if (is_string($scope)) {
             $configCollection->addFieldToFilter('scope', array("eq" => $scope));
         }
-        $configCollection->load();  
+        $configCollection->load();
         foreach ($configCollection as $config) {
             $this->_removedConfigValues[] = $config;
             $config->delete();
         }
         unset($configCollection);
     }
-    
+
     /**
      * Reset the Magento config to its original values.
      *
