@@ -121,7 +121,7 @@ class Zend_Test_PHPUnit_Constraint_ResponseHeader90 extends \PHPUnit\Framework\C
      *     public function evaluate($other, $description = '', $returnResult = FALSE)
      * We use the new interface for PHP-strict checking, but emulate the old one
      */
-    public function evaluate($response, $assertType = '', $variable = FALSE)
+    public function evaluate($response, $assertType = '', $variable = FALSE): ?bool
     {
         if (!$response instanceof Zend_Controller_Response_Abstract) {
             #require_once 'Zend/Test/PHPUnit/Constraint/Exception.php';
@@ -206,7 +206,7 @@ class Zend_Test_PHPUnit_Constraint_ResponseHeader90 extends \PHPUnit\Framework\C
      * NOTE 2:
      * Interface changed again in PHPUnit 4.1.0 because of refactoring to SebastianBergmann\Comparator
      */
-    public function fail($other, $description, \SebastianBergmann\Comparator\ComparisonFailure $cannot_be_used = NULL)
+    public function fail($other, $description, \SebastianBergmann\Comparator\ComparisonFailure $cannot_be_used = NULL): void
     {
         #require_once 'Zend/Test/PHPUnit/Constraint/Exception.php';
         switch ($this->_assertType) {
@@ -257,7 +257,7 @@ class Zend_Test_PHPUnit_Constraint_ResponseHeader90 extends \PHPUnit\Framework\C
      *
      * @return string
      */
-    public function toString()
+    public function toString(): string
     {
         return '';
     }
