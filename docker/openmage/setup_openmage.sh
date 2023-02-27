@@ -23,8 +23,8 @@ fi
   --db_name 'magetest_dev' \
   --db_user 'magetest' \
   --db_pass 'password123' \
-  --url 'http://localhost/' \
-  --secure_base_url 'https://localhost/' \
+  --url 'http://localhost:8080/' \
+  --secure_base_url 'https://localhost:4343/' \
   --use_rewrites true \
   --use_secure false \
   --use_secure_admin false \
