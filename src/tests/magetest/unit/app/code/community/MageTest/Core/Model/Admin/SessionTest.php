@@ -1,5 +1,9 @@
 <?php
 
+namespace app\code\community\MageTest\Core\Model\Admin;
+
+use Mage;
+use Mage_Admin_Model_Session;
 use PHPUnit\Framework\TestCase;
 
 class SessionTest extends TestCase

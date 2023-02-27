@@ -1,6 +1,11 @@
 <?php
 
+namespace app\code\community\MageTest\Core\Model;
+
+use Mage;
+use Mage_Core_Model_Email;
 use PHPUnit\Framework\TestCase;
+use Zend_Mail;
 
 class MageTest_Core_Model_EmailTest extends TestCase
 {
@@ -39,9 +44,9 @@ class MageTest_Core_Model_EmailTest extends TestCase
     protected function sendEmailMessage($mailer, $message)
     {
         $mailer->setBody($message)
-                ->setType('text')
-                ->setToEmail('foo@bar.com')
-                ->setToName('Foo Bar');
+            ->setType('text')
+            ->setToEmail('foo@bar.com')
+            ->setToName('Foo Bar');
 
         $mailer->send();
 

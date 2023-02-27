@@ -1,5 +1,8 @@
 <?php
 
+namespace lib\MageTest\PHPUnit\Framework;
+use MageTest_PHPUnit_Framework_TestCase;
+
 class MageTest_PHPUnit_Framework_TestCaseTest extends MageTest_PHPUnit_Framework_TestCase
 {
     public function testMocksModel()

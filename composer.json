@@ -6,7 +6,7 @@
     "keywords": ["TDD", "unit", "unit-testing", "tests", "testing"],
     "require": {
         "php": ">=8.1",
-        "phpunit/phpunit": "^9.6.0"
+        "phpunit/phpunit": "^9.0"
     },
     "require-dev": {
         "roave/security-advisories": "dev-latest"
@@ -24,12 +24,11 @@
     "authors":[
         {
             "name":"Alistair Stead",
-            "email":"alistair@sessiondigital.com"
+            "homepage":"https://twitter.com/alistairstead"
         },
         {
             "name":"Aaron Bonner",
-            "email":"aaron@aaronbonner.io",
-            "homepage":"http://aaronbonner.io"
+            "homepage":"https://aaronbonner.io"
         },
         {
             "name": "Other contributors",

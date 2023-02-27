@@ -1,6 +1,11 @@
 <?php
 
+namespace app\code\community\MageTest\Core\Model\Email;
+
+use Mage;
+use Mage_Core_Model_Email_Template;
 use PHPUnit\Framework\TestCase;
+use Zend_Mail;
 
 class MageTest_Core_Model_Email_TemplateTest extends TestCase
 {
