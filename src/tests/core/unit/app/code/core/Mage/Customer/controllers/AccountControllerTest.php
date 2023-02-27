@@ -38,7 +38,7 @@ class Mage_Customer_AccountControllerTest extends MageTest_PHPUnit_Framework_Con
     public function indexActionReturnsDashboardToLoggedInUser()
     {
         // Log in with the fixtures user
-        $this->_login();
+        $this->_login('foo', 'bar');
         // Attempt to access the account page
         $this->dispatch('customer/account/index');
         $this->markTestIncomplete(

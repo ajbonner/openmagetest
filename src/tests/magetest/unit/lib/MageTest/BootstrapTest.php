@@ -1,9 +1,5 @@
 <?php
 
-namespace lib\MageTest;
-
-use Mage;
-use MageTest_Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 class MageTest_BootstrapTest extends TestCase

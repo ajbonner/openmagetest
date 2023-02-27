@@ -13,23 +13,19 @@
  * @package    Mage_Api
  * @subpackage Mage_Api_Test
  *
- *
- * @uses PHPUnit_Framework_Magento_TestCase
  */
 class Mage_Api_SoapControllerTest extends MageTest_PHPUnit_Framework_ControllerTestCase {
-    
+
     /**
-     * theFullAPISoapRouteUsesSoapController
-     * @author Alistair Stead
      * @test
      */
-    public function theFullAPISoapRouteUsesSoapController()
+    public function theFullApiSoapRouteUsesSoapController()
     {
-        $this->dispatch('api/soap?wsdl=1');
-        
+        $this->dispatch('/api/soap?wsdl=1');
+
         $this->assertAction('index', "The index action is not used");
         $this->assertController('soap', "The expected controller is not been used");
-        
+
         $this->assertHeaderContains('Content-Type', 'text/xml', "The Content-Type header is not text/xml as expected");
     } // theFullAPISoapRouteUsesSoapController
 }

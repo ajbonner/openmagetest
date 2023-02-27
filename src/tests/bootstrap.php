@@ -16,6 +16,7 @@ session_id(uniqid());
 $_SERVER['MAGE_TEST'] = true;
 // Standard Magento configuration
 $_SERVER['MAGE_IS_DEVELOPER_MODE'] = true;
+$_SERVER['HTTP_HOST'] = 'localhost';
 
 // Initialize Mage_Log in case of an exception during autoloading a class
 Zend_Log::INFO;

@@ -22,7 +22,7 @@
 if (version_compare(PHPUnit_Runner_Version::id(), '9.0', '>=')) {
     include(__DIR__ . DIRECTORY_SEPARATOR . 'ResponseHeader90.php');
 
-    class Zend_Test_PHPUnit_Constraint_ResponseHeader extends Zend_Test_PHPUnit_Constraint_ResponseHeader41
+    class Zend_Test_PHPUnit_Constraint_ResponseHeader extends Zend_Test_PHPUnit_Constraint_ResponseHeader90
     {}
 } elseif (version_compare(PHPUnit_Runner_Version::id(), '4.1', '>=')) {
     include(__DIR__ . DIRECTORY_SEPARATOR . 'ResponseHeader41.php');
