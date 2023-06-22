@@ -12,7 +12,7 @@ $_SERVER['SCRIPT_FILENAME'] = 'index.php';
 $_SESSION = array();
 session_id(uniqid());
 
-// Global scope param to identfy that the application is under test
+// Global scope param to identify that the application is under test
 $_SERVER['MAGE_TEST'] = true;
 // Standard Magento configuration
 $_SERVER['MAGE_IS_DEVELOPER_MODE'] = true;

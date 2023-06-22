@@ -12,27 +12,36 @@
  *
  * @package    Mage_CatalogSearch
  * @subpackage Mage_CatalogSearch_Test
- *
- *
- * @uses PHPUnit_Framework_Magento_TestCase
  */
 class Mage_CatalogSearch_ResultControllerTest extends MageTest_PHPUnit_Framework_ControllerTestCase {
 
     /**
-     * indexActionShouldDisplayMessageWithEmptyQuery
-     * @author Alistair Stead
      * @test
      */
-    public function indexActionShouldDisplayMessageWithEmptyQuery()
+    public function indexActionShouldRedirectToReferrerWithEmptyQuery()
     {
+        $formKey = $this->getFormKey('catalogsearch/index');
+
         $this->request->setMethod('POST')
-            ->setPost(array('q' => ''));
-            
+            ->setPost(['q' => '', 'form_key' => $formKey]);
+
         $this->dispatch('catalogsearch/result/index');
-        
-        $this->assertResponseCode('200', "The response code is not 200");
-        $this->assertContains('Minimum Search query length is 1', $this->response->getBody());
-    } // indexActionShouldDisplayMessageWithEmptyQuery
-    
-    
+
+        $this->assertResponseCode('302', 'The response code is not 302');
+    }
+
+    /**
+     * @test
+     */
+    public function indexActionShouldReturn200WithValidQuery()
+    {
+        $formKey = $this->getFormKey('catalogsearch/index');
+
+        $this->request->setMethod('POST')
+            ->setPost(['q' => 'foo', 'form_key' => $formKey]);
+
+        $this->dispatch('catalogsearch/result/index');
+
+        $this->assertResponseCode('200', 'The response code is not 200');
+    }
 }

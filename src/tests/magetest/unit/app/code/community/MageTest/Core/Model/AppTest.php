@@ -5,7 +5,7 @@ namespace app\code\community\MageTest\Core\Model;
 use MageTest_Core_Model_App;
 use PHPUnit\Framework\TestCase;
 
-class MageTest_Core_Model_AppTest extends TestCase
+class AppTest extends TestCase
 {
     /**
      * Member variable that will hold the Magento Application
@@ -50,3 +50,5 @@ class MageTest_Core_Model_AppTest extends TestCase
         );
     }
 }
+
+class_alias(AppTest::class, 'MageTest_Core_Model_AppTest', false);

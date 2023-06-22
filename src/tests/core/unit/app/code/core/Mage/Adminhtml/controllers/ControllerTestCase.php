@@ -12,9 +12,6 @@
  *
  * @package    Mage_Adminhtml
  * @subpackage Mage_Adminhtml_Test
- *
- *
- * @uses Ibuildings_Mage_Test_PHPUnit_ControllerTestCase
  */
 class Mage_Adminhtml_ControllerTestCase extends MageTest_PHPUnit_Framework_ControllerTestCase {
 
@@ -23,73 +20,75 @@ class Mage_Adminhtml_ControllerTestCase extends MageTest_PHPUnit_Framework_Contr
      *
      * @var string
      **/
-    protected $userName;
+    protected static $userName;
 
     /**
      * Fixture first name
      *
      * @var string
      **/
-    protected $firstName;
+    protected static $firstName;
 
     /**
      * Fixture lastName
      *
      * @var string
      **/
-    protected $lastName;
+    protected static $lastName;
 
     /**
      * Fixture email
      *
      * @var string
      **/
-    protected $email;
+    protected static $email;
 
     /**
      * Fixture password
      *
      * @var string
      **/
-    protected $password;
+    protected static $password;
 
     /**
      * Fixture role name
      *
      * @var string
      **/
-    protected $roleName;
+    protected static $roleName;
 
     /**
      * Set up the fixtures for the Adminhtml module tests
      *
      * @return void
+     * @throws Throwable
      * @author Alistair Stead
-     **/
+     */
     public function setup(): void
     {
         parent::setup();
-
-        // Build some fuxture values
-        $this->userName = 'fixture';
-        $this->firstName = 'Test';
-        $this->lastName = 'User';
-        $this->email = 'test.user@magetest.com';
-        $this->password = '123123';
-        $this->roleName = 'Fixture';
-        // Generate the fixture
-        $this->createAdminUserFixture();
+        self::$userName = 'fixture';
+        self::$firstName = 'Test';
+        self::$lastName = 'User';
+        self::$email = 'test.user@magetest.com';
+        self::$password = '123123';
+        self::$roleName = 'Fixture';
+        self::createAdminUserFixture();
     }
 
     /**
      * Tear down the fixtures for the Adminhtml module tests
      *
      * @return void
-     * @author Alistair Stead
      **/
     public function tearDown(): void
     {
-        $this->deleteAdminUserFixture();
+        self::deleteAdminUserFixture();
+    }
+
+    public static function tearDownAfterClass(): void
+    {
+        self::deleteAdminUserFixture();
     }
 
     /**
@@ -100,23 +99,25 @@ class Mage_Adminhtml_ControllerTestCase extends MageTest_PHPUnit_Framework_Contr
      * @param $password String Password for the supplied account
      *
      * @return void
-     * @author Alistair Stead
      **/
     protected function login($userName = null, $password = null)
     {
+        $formKey = $this->getFormKey('admin/login');
+
         if (is_null($userName)) {
-            $userName = $this->userName;
+            $userName = self::$userName;
         }
         if (is_null($password)) {
-            $password = $this->password;
+            $password = self::$password;
         }
         $this->request->setMethod('POST')
-                              ->setPost(array(
-                                  'login' => array(
-                                      'username' => $userName,
-                                      'password' => $password,
-                                    )
-                              ));
+            ->setPost([
+                'login' => [
+                    'username' => $userName,
+                    'password' => $password,
+                ],
+                'form_key' => $formKey
+            ]);
 
         $this->dispatch('admin/index/login');
     }
@@ -138,33 +139,34 @@ class Mage_Adminhtml_ControllerTestCase extends MageTest_PHPUnit_Framework_Contr
      * during testing
      *
      * @return void
+     * @throws Throwable
      * @author Alistair Stead
      **/
-    protected function createAdminUserFixture()
+    protected static function createAdminUserFixture()
     {
         //create new user
         try {
             $user = Mage::getModel('admin/user')
                 ->setData(array(
-                    'username'  => $this->userName,
-                    'firstname' => $this->firstName,
-                    'lastname'  => $this->lastName,
-                    'email'     => $this->email,
-                    'password'  => $this->password,
+                    'username'  => self::$userName,
+                    'firstname' => self::$firstName,
+                    'lastname'  => self::$lastName,
+                    'email'     => self::$email,
+                    'password'  => self::$password,
                     'is_active' => 1
                 ))->save();
 
             //create new role
-            $role = Mage::getModel("admin/roles")
-                    ->setName($this->roleName)
-                    ->setRoleType('G')
-                    ->save();
+            $role = Mage::getModel('admin/roles')
+                ->setName(self::$roleName)
+                ->setRoleType('G')
+                ->save();
 
             //give "all" privileges to role
-            Mage::getModel("admin/rules")
-                    ->setRoleId($role->getId())
-                    ->setResources(array("all"))
-                    ->saveRel();
+            Mage::getModel('admin/rules')
+                ->setRoleId($role->getId())
+                ->setResources(array("all"))
+                ->saveRel();
 
             $user->setRoleIds(array($role->getId()))
                 ->setRoleUserId($user->getUserId())
@@ -180,24 +182,21 @@ class Mage_Adminhtml_ControllerTestCase extends MageTest_PHPUnit_Framework_Contr
      * tests
      *
      * @return void
-     * @author Alistair Stead
      **/
-    protected function deleteAdminUserFixture()
+    protected static function deleteAdminUserFixture(): void
     {
-        if ($this->userName) {
+        if (self::$userName) {
             $users = Mage::getModel('admin/user')->getCollection();
-            $users->addFieldToFilter('username', array( 'eq' => $this->userName));
-            $users->load();
-            foreach ( $users as $user ) {
+            $users->addFieldToFilter('username', ['eq' => self::$userName]);
+            foreach ($users as $user) {
                 $user->delete();
             }
         }
 
-        if ($this->roleName) {
+        if (self::$roleName) {
             $roles = Mage::getModel('api/roles')->getCollection();
-            $roles->addFieldToFilter('role_name', array('eq' => $this->roleName));
-            $roles->load();
-            foreach ( $roles as $role ) {
+            $roles->addFieldToFilter('role_name', ['eq' => self::$roleName]);
+            foreach ($roles as $role) {
                 $role->delete();
             }
         }

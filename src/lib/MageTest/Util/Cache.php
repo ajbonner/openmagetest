@@ -39,7 +39,7 @@ class MageTest_Util_Cache
     public static function enable($types = null)
     {
         if (is_null($types)) {
-            $ypes = array(
+            $types = [
                 'config',
                 'layout',
                 'block_html',
@@ -47,10 +47,10 @@ class MageTest_Util_Cache
                 'collections',
                 'eav',
                 'config_api'
-            );
+            ];
         }
         $allTypes = Mage::app()->useCache();
-        $cacheTypes = array();
+        $cacheTypes = [];
         foreach ($types as $type) {
             $cacheTypes[] = $type->getId();
         }
@@ -66,7 +66,7 @@ class MageTest_Util_Cache
             Mage::app()->saveUseCache($allTypes);
         }
     }
-    
+
     /**
      * Disable the Magento cache
      *
@@ -104,7 +104,7 @@ class MageTest_Util_Cache
             Mage::app()->saveUseCache($allTypes);
         }
     }
-    
+
     /**
      * Clear the Magento cache
      *
@@ -124,14 +124,14 @@ class MageTest_Util_Cache
                 'config_api'
             );
         }
-        
+
         if (!empty($types)) {
             foreach ($types as $type) {
                 $tags = Mage::app()->getCacheInstance()->cleanType($type);
             }
         }
     }
-    
+
     /**
      * Entirely flush the cache within the system
      *

@@ -58,3 +58,5 @@ class SessionTest extends TestCase
         $this->assertEmpty(headers_list());
     }
 }
+
+class_alias(SessionTest::class, 'MageTest_Core_Model_Admin_SessionTest', false);

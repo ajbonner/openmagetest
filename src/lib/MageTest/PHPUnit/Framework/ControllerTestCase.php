@@ -180,14 +180,12 @@ abstract class MageTest_PHPUnit_Framework_ControllerTestCase
     }
 
     /**
-     * undocumented function
-     *
      * @return void
      */
     public function getBootstrap()
     {
         if (is_null($this->_bootstrap)) {
-            $this->_bootstrap = new MageTest_Bootstrap;
+            $this->_bootstrap = new MageTest_Bootstrap();
         }
 
         return $this->_bootstrap;
@@ -234,8 +232,8 @@ abstract class MageTest_PHPUnit_Framework_ControllerTestCase
      */
     public function reset()
     {
-        $_GET     = array();
-        $_POST    = array();
+        $_GET     = [];
+        $_POST    = [];
         $this->resetRequest();
         $this->resetResponse();
         $this->resetResponseMail();
@@ -249,8 +247,8 @@ abstract class MageTest_PHPUnit_Framework_ControllerTestCase
      */
     public function resetSession()
     {
-        $_SESSION = array();
-        $_COOKIE = array();
+        $_SESSION = [];
+        $_COOKIE = [];
     }
 
     /**
@@ -348,6 +346,20 @@ abstract class MageTest_PHPUnit_Framework_ControllerTestCase
         $this->_resetPlaceholders();
         $this->_response = null;
         return $this;
+    }
+
+    protected function getFormKey($route): string
+    {
+        $this->dispatch($route);
+        $dom = new Zend_Dom_Query($this->getResponse()->getBody());
+        $result = $dom->query('input[name="form_key"]');
+        if (! $result->count() || ! $result->current()->getAttribute('value')) {
+            throw new \RuntimeException('form_key not found with route ' . $route);
+        }
+        $formKey = $result->current()->getAttribute('value');
+        $this->reset();
+
+        return $formKey;
     }
 
     /**

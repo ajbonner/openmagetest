@@ -7,7 +7,7 @@ use Mage_Core_Model_Email;
 use PHPUnit\Framework\TestCase;
 use Zend_Mail;
 
-class MageTest_Core_Model_EmailTest extends TestCase
+class EmailTest extends TestCase
 {
     public function setUp(): void
     {
@@ -53,3 +53,5 @@ class MageTest_Core_Model_EmailTest extends TestCase
         return Mage::app()->getResponseEmail();
     }
 }
+
+class_alias(EmailTest::class, 'MageTest_Core_Model_EmailTest', false);
