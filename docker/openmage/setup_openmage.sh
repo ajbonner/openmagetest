@@ -8,7 +8,12 @@ if [ -z "${OPENMAGE_ROOT-}" ]; then
   exit 1;
 fi
 
-cd $OPENMAGE_ROOT
+# Wait for mysql to be ready
+while ! mysqladmin ping -h"mysql" --silent; do
+  sleep 1
+done
+
+cd "$OPENMAGE_ROOT"
 
 if [ -e app/etc/local.xml ]; then
   rm -rf app/etc/local.xml

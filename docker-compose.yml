@@ -49,4 +49,14 @@ services:
     depends_on:
       - php
     entrypoint: ['/usr/bin/env', 'bash', '-c', '/srv/magetest/docker/setup.sh']
-
+  testsuite:
+    image: php:8.2-fpm
+    volumes:
+      - ./build/openmage:/srv/magetest
+    working_dir: /srv/magetest/tests
+    restart: "no"
+    depends_on:
+      - mysql
+    profiles:
+      - testsuite
+    entrypoint: "/bin/sh -c 'sleep 2 && /srv/magetest/vendor/bin/phpunit'"

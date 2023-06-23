@@ -1,7 +1,7 @@
 FROM php:8.2-fpm
 
 RUN apt-get update \
-    && apt-get install -y jq libicu-dev libcurl4-openssl-dev libgd-dev libxml2-dev libzip-dev p7zip zip zlib1g-dev \
+    && apt-get install -y libicu-dev libcurl4-openssl-dev libgd-dev libxml2-dev libzip-dev p7zip zip zlib1g-dev \
     && docker-php-ext-install pdo_mysql opcache ctype dom gd intl simplexml soap zip
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
