@@ -1,8 +1,8 @@
 Contributing
 ============
 
-Mage-Test is a community driven project to help support Unit Testing of 
-Magento Modules and Projects. We are more than happy to accept external 
+OpenMageTest is a community driven project to help support Unit Testing of 
+OpenMage Modules and Projects. We are more than happy to accept external 
 contributions to the project in the form of feedback, bug reports and even 
 better - pull requests.
 
@@ -16,11 +16,11 @@ steps:
 * Included as much information about the bug as possible, including any output
   you've received, what OS and version you're on, etc.
 
-  [Submit your issue](https://github.com/MageTest/Mage-Test/issues/new)
+  [Submit your issue](https://github.com/ajbonner/openmagetest/issues/new)
 
 ## Style Guide
 
-Mage-Test follows the standards defined in the
+OpenMageTest follows the standards defined in the
 [PSR-0](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md),
 [PSR-1](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-1.md)
 and
