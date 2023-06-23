@@ -1,9 +1,9 @@
 {
-    "name": "magetest/magento-phpunit-extension",
+    "name": "openmagetest/magento-phpunit-extension",
     "type": "magento-module",
     "license":"MIT",
-    "description":"Magento PHPUnit extension, a lightweight module and library for testing Magento applications with PHPUnit",
-    "keywords": ["TDD", "unit", "unit-testing", "tests", "testing"],
+    "description":"OpenMage PHPUnit extension, a lightweight module and library for testing OpenMage applications with PHPUnit",
+    "keywords": ["TDD", "unit", "unit-testing", "openmage", "zend", "zend framework", "tests", "testing"],
     "require": {
         "php": ">=8.1",
         "phpunit/phpunit": "^9.0"
@@ -33,6 +33,10 @@
         {
             "name": "Other contributors",
             "homepage":"https://github.com/MageTest/Mage-Test/contributors"
+        },
+        {
+            "name": "Other contributors",
+            "homepage":"https://github.com/ajbonner/openmagetest/contributors"
         }
     ]
 }
