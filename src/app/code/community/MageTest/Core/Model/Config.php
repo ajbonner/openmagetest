@@ -35,14 +35,14 @@ class MageTest_Core_Model_Config extends Mage_Core_Model_Config
      *
      * @var array
      */
-    protected $mockObject = array();
+    protected $mockObject = [];
 
     /**
      * Array of event names that should not be dispatched
      *
      * @var string[]
      */
-    protected $disabledEvents = array();
+    protected $disabledEvents = [];
 
     /**
      * Flag to disable dispatch of all events
@@ -54,22 +54,22 @@ class MageTest_Core_Model_Config extends Mage_Core_Model_Config
     /**
      * Array of observer names that are permitted to receive events
      */
-    protected $observerWhitelist = array();
+    protected $observerWhitelist = [];
 
     /**
      * Array of observer names that are not permitted to receive events
      */
-    protected $observerBlacklist = array();
+    protected $observerBlacklist = [];
 
     /**
      * Set a mock object instance for the given model class
      *
-     * @param string $modelClass
+     * @param string $modelClass Using magento group name syntax e.g. catalog/product
      * @param object $mockObject
      *
-     * @return null
+     * @return void
      */
-    public function setModelInstanceMock($modelClass, $mockObject)
+    public function setModelInstanceMock($modelClass, $mockObject): void
     {
         $this->mockObject[$modelClass][] = $mockObject;
     }
@@ -84,7 +84,7 @@ class MageTest_Core_Model_Config extends Mage_Core_Model_Config
     public function resetMockStack($modelClass = null)
     {
         if (is_null($modelClass)) {
-            $this->mockObject = array();
+            $this->mockObject = [];
         } else {
             unset($this->mockObject[$modelClass]);
         }
@@ -97,7 +97,7 @@ class MageTest_Core_Model_Config extends Mage_Core_Model_Config
         }
 
         $config = parent::getEventConfig($area, $eventName);
-        $observersToRemove = array();
+        $observersToRemove = [];
 
         if ($config && ! empty($this->observerWhitelist)) {
             foreach ($config->observers->children() as $observerName => $observerConfig) {
@@ -144,7 +144,7 @@ class MageTest_Core_Model_Config extends Mage_Core_Model_Config
      *
      * @return object
      */
-    public function getModelInstance($modelClass = '', $constructArguments = array())
+    public function getModelInstance($modelClass = '', $constructArguments = [])
     {
         if (isset($this->mockObject[$modelClass])) {
             if (count($this->mockObject[$modelClass]) > 1) {
@@ -216,7 +216,7 @@ class MageTest_Core_Model_Config extends Mage_Core_Model_Config
     public function reenableEvent($event)
     {
         if (in_array($event, $this->disabledEvents)) {
-            $this->disabledEvents = array_diff($this->disabledEvents, array($event));
+            $this->disabledEvents = array_diff($this->disabledEvents, [$event]);
         }
 
         return $this;

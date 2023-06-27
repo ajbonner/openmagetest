@@ -1,21 +1,5 @@
 <?php
-/**
- * Magento Catalog Category Controller tests
- *
- * @package    Mage_Catalog
- * @copyright  Copyright (c) 2010 Ibuildings
- * @version    $Id$
- */
 
-/**
- * Mage_Catalog_CategoryControllerTest
- *
- * @package    Mage_Catalog
- * @subpackage Mage_Catalog_Test
- *
- *
- * @uses PHPUnit_Framework_Magento_TestCase
- */
 class Mage_Catalog_CategoryControllerTest extends MageTest_PHPUnit_Framework_ControllerTestCase {
 
     /**
@@ -44,9 +28,7 @@ class Mage_Catalog_CategoryControllerTest extends MageTest_PHPUnit_Framework_Con
     public function tearDown(): void
     {
         parent::tearDown();
-        unset(
-            $this->_helperCategory
-        );
+        unset($this->_helperCategory);
     }
 
     /**

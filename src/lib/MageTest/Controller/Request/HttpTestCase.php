@@ -50,7 +50,7 @@ class MageTest_Controller_Request_HttpTestCase
      */
     protected $_rewritedPathInfo= null;
     protected $_requestedRouteName = null;
-    protected $_routingInfo = array();
+    protected $_routingInfo = [];
 
     protected $_route;
 
@@ -70,7 +70,7 @@ class MageTest_Controller_Request_HttpTestCase
      *
      * @var array
      */
-    protected $_beforeForwardInfo = array();
+    protected $_beforeForwardInfo = [];
 
     /**
      * Request headers
@@ -472,7 +472,7 @@ class MageTest_Controller_Request_HttpTestCase
             if ($names) {
                 $this->_directFrontNames = $names->asArray();
             } else {
-                return array();
+                return [];
             }
         }
         return $this->_directFrontNames;
@@ -720,12 +720,12 @@ class MageTest_Controller_Request_HttpTestCase
     public function initForward()
     {
         if (empty($this->_beforeForwardInfo)) {
-            $this->_beforeForwardInfo = array(
+            $this->_beforeForwardInfo = [
                 'params' => $this->getParams(),
                 'action_name' => $this->getActionName(),
                 'controller_name' => $this->getControllerName(),
                 'module_name' => $this->getModuleName()
-            );
+            ];
         }
 
         return $this;

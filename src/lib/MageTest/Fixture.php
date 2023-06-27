@@ -30,5 +30,5 @@
  */
 abstract class MageTest_Fixture
 {
-    abstract static function create(array $data = array());
+    abstract static function create(array $data = []);
 }

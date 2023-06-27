@@ -63,7 +63,7 @@ abstract class MageTest_PHPUnit_Framework_ControllerTestCase
      *
      * @var array
      */
-    protected $_options = array();
+    protected $_options = [];
 
     /**
      * Internal member variable that will hold any email generated
@@ -78,21 +78,21 @@ abstract class MageTest_PHPUnit_Framework_ControllerTestCase
      *
      * @var array
      */
-    protected $_originalConfigValues = array();
+    protected $_originalConfigValues = [];
 
     /**
      * Internal registry of the new config values.
      *
      * @var array
      */
-    protected $_newConfigValues = array();
+    protected $_newConfigValues = [];
 
     /**
      * Internal registry of the removed config values.
      *
      * @var array
      */
-    protected $_removedConfigValues = array();
+    protected $_removedConfigValues = [];
 
     /**
      * Overloading: prevent overloading to special properties
@@ -104,7 +104,7 @@ abstract class MageTest_PHPUnit_Framework_ControllerTestCase
      */
     public function __set($name, $value)
     {
-        if (in_array($name, array('request', 'response', 'frontController'))) {
+        if (in_array($name, ['request', 'response', 'frontController'])) {
             require_once 'Zend/Exception.php';
             throw new Zend_Exception(sprintf('Setting %s object manually is not allowed', $name));
         }
@@ -499,9 +499,9 @@ abstract class MageTest_PHPUnit_Framework_ControllerTestCase
     public function removeConfig($path, $scope = null)
     {
         $configCollection = Mage::getModel('core/config_data')->getCollection();
-        $configCollection->addFieldToFilter('path', array("eq" => $path));
+        $configCollection->addFieldToFilter('path', ["eq" => $path]);
         if (is_string($scope)) {
-            $configCollection->addFieldToFilter('scope', array("eq" => $scope));
+            $configCollection->addFieldToFilter('scope', ["eq" => $scope]);
         }
         $configCollection->load();
         foreach ($configCollection as $config) {

@@ -76,7 +76,7 @@ class MageTest_Util_Cache
     public static function disable($types = null)
     {
         if (is_null($types)) {
-            $ypes = array(
+            $ypes = [
                 'config',
                 'layout',
                 'block_html',
@@ -84,10 +84,10 @@ class MageTest_Util_Cache
                 'collections',
                 'eav',
                 'config_api'
-            );
+            ];
         }
         $allTypes = Mage::app()->useCache();
-        $cacheTypes = array();
+        $cacheTypes = [];
         foreach ($types as $type) {
             $cacheTypes[] = $type->getId();
         }
@@ -114,7 +114,7 @@ class MageTest_Util_Cache
     public static function clean($types = null)
     {
         if (is_null($types)) {
-            $types = array(
+            $types = [
                 'config',
                 'layout',
                 'block_html',
@@ -122,7 +122,7 @@ class MageTest_Util_Cache
                 'collections',
                 'eav',
                 'config_api'
-            );
+            ];
         }
 
         if (!empty($types)) {

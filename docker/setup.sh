@@ -11,6 +11,6 @@ fi
 bash /srv/magetest/docker/openmage/install_openmage.sh
 bash /srv/magetest/docker/openmage/setup_openmage.sh
 
-cp -r /srv/magetest/src/{app,lib,tests} "${OPENMAGE_ROOT}/"
+ln -s /srv/magetest/src/{app,lib,tests} "${OPENMAGE_ROOT}/"
 
 /usr/bin/env php -derror_reporting='~E_DEPRECATED' /usr/bin/magerun.phar --root-dir="${OPENMAGE_ROOT}" sys:setup:run

@@ -71,7 +71,7 @@ class MageTest_Bootstrap
      * @return void
      * @author Alistair Stead
      */
-    public function init($code = '', $type = 'store', $options = array(), $modules = array())
+    public function init($code = '', $type = 'store', $options = [], $modules = [])
     {
         Mage::reset();
         Mage::setRoot();
@@ -98,18 +98,18 @@ class MageTest_Bootstrap
      * @return void
      * @author Alistair Stead
      **/
-    public function run($code = '', $type = 'store', $options = array())
+    public function run($code = '', $type = 'store', $options = [])
     {
         Varien_Profiler::start('mage');
         Mage::setRoot();
         $this->setProtectedProperty('_app', new MageTest_Core_Model_App());
         $this->setProtectedProperty('_events', new Varien_Event_Collection);
         $this->setProtectedProperty('_config', new MageTest_Core_Model_Config($options));
-        $this->getProtectedPropertyValue('_app')->run(array(
+        $this->getProtectedPropertyValue('_app')->run([
             'scope_code' => $code,
             'scope_type' => $type,
             'options'    => $options,
-        ));
+        ]);
 
         $app = $this->app();
         $app->setRequest(new MageTest_Controller_Request_HttpTestCase());
@@ -127,7 +127,7 @@ class MageTest_Bootstrap
      * @return MageTest_Core_Model_App
      * @author Alistair Stead
      **/
-    public function app($code = '', $type = 'store', $options = array())
+    public function app($code = '', $type = 'store', $options = [])
     {
         if (is_null($this->getProtectedPropertyValue('_app'))) {
             Mage::setRoot();

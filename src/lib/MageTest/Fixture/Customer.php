@@ -35,9 +35,9 @@ class MageTest_Fixture_Customer extends MageTest_Fixture
      *
      * @return Mage_Customer_Customer
      */
-    public static function create(array $data = array())
+    public static function create(array $data = [])
     {
-        $_data = array(
+        $_data = [
             'prefix' => 'Mr',
             'firstname' => 'Fixture',
             'middlename' => 'C',
@@ -47,7 +47,7 @@ class MageTest_Fixture_Customer extends MageTest_Fixture
             'dob' => '07/03/1977',
             'taxvat' => '000226677',
             'gender' => 'male'
-        );
+        ];
 
         $data = array_merge($_data, $data);
 

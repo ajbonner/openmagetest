@@ -147,14 +147,14 @@ class Mage_Adminhtml_ControllerTestCase extends MageTest_PHPUnit_Framework_Contr
         //create new user
         try {
             $user = Mage::getModel('admin/user')
-                ->setData(array(
+                ->setData([
                     'username'  => self::$userName,
                     'firstname' => self::$firstName,
                     'lastname'  => self::$lastName,
                     'email'     => self::$email,
                     'password'  => self::$password,
                     'is_active' => 1
-                ))->save();
+                ])->save();
 
             //create new role
             $role = Mage::getModel('admin/roles')
@@ -165,10 +165,10 @@ class Mage_Adminhtml_ControllerTestCase extends MageTest_PHPUnit_Framework_Contr
             //give "all" privileges to role
             Mage::getModel('admin/rules')
                 ->setRoleId($role->getId())
-                ->setResources(array("all"))
+                ->setResources(["all"])
                 ->saveRel();
 
-            $user->setRoleIds(array($role->getId()))
+            $user->setRoleIds([$role->getId()])
                 ->setRoleUserId($user->getUserId())
                 ->saveRelations();
         } catch (Exception $e) {

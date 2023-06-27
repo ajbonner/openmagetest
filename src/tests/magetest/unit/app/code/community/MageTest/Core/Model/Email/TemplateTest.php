@@ -47,7 +47,7 @@ class TemplateTest extends TestCase
             ->setSenderEmail('baz@qux.co.uk')
             ->setTemplateSubject('Testing 123')
             ->setTemplateType(Mage_Core_Model_Email_Template::TYPE_TEXT)
-            ->send('foo@bar.com', 'Foo Bar', array());
+            ->send('foo@bar.com', 'Foo Bar', []);
 
         $mail = Mage::app()->getResponseEmail();
 

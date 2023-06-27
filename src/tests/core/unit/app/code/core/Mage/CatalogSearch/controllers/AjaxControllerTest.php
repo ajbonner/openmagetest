@@ -26,12 +26,12 @@ class Mage_CatalogSearch_AjaxControllerTest extends MageTest_PHPUnit_Framework_C
     public function suggestActionReturns200()
     {
         $this->request->setMethod('POST')
-            ->setPost(array('q' => 'invalid'));
-            
+            ->setPost(['q' => 'invalid']);
+
         $this->dispatch('catalogsearch/ajax/suggest');
         $this->assertResponseCode('200', "The suggest action does not return success.");
     } // suggestActionReturns200
-    
+
     /**
      * suggestActionReturnsFormattedHTMLResults
      * @author Alistair Stead
@@ -40,13 +40,13 @@ class Mage_CatalogSearch_AjaxControllerTest extends MageTest_PHPUnit_Framework_C
     public function suggestActionReturnsFormattedHTMLResults()
     {
         $this->request->setMethod('POST')
-            ->setPost(array('q' => 'invalid'));
-            
+            ->setPost(['q' => 'invalid']);
+
         $this->dispatch('catalogsearch/ajax/suggest');
-        
+
         $this->markTestIncomplete(
                   'This test has not been implemented yet.'
                 );
     } // suggestActionReturnsFormattedHTMLResults
-    
+
 }

@@ -35,14 +35,14 @@ class MageTest_Fixture_Order_Invoice extends MageTest_Fixture
      *
      * @return Test_Helper_Order_Invoice
      */
-    public static function create(array $data = array())
+    public static function create(array $data = [])
     {
-        $_data = array(
+        $_data = [
             'first_name' => 'Fixture',
             'middle_name' => 'C',
             'last_name' => 'User',
             'email' => 'fixture.c.user@magento.com'
-        );
+        ];
 
         $data = array_merge($_data, $data);
 

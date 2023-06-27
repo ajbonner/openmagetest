@@ -35,7 +35,7 @@ class MageTest_Core_Model_App extends Mage_Core_Model_App
      *
      * @var array
      */
-    protected $_dispatchedEvents = array();
+    protected $_dispatchedEvents = [];
 
     /**
      * Initialize application front controller
@@ -131,7 +131,7 @@ class MageTest_Core_Model_App extends Mage_Core_Model_App
      */
     public function resetDispatchedEvents()
     {
-        $this->_dispatchedEvents = array();
+        $this->_dispatchedEvents = [];
         return $this;
     }
 }

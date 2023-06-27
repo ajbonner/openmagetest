@@ -38,8 +38,8 @@ class MageTest_Core_Model_Email_Template extends Mage_Core_Model_Email_Template
      * @param   array       $variables    template variables
      * @return  boolean
      **/
-     
-    public function send($email, $name = null, array $variables = array())
+
+    public function send($email, $name = null, array $variables = [])
     {
         if (!$this->isValidForSend()) {
             Mage::logException(new Exception('This letter cannot be sent.')); // translation is intentionally omitted
@@ -112,5 +112,5 @@ class MageTest_Core_Model_Email_Template extends Mage_Core_Model_Email_Template
         }
 
         return true;
-    }   
+    }
 }

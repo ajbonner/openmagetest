@@ -36,9 +36,9 @@ class MageTest_Fixture_Product extends MageTest_Fixture
      * @param $type string simple|grouped|configurable|virtual|bundle|downloadable|giftcard
      * @return Mage_Catalog_Product
      */
-    public static function create(array $data = array())
+    public static function create(array $data = [])
     {
-        $_data = array(
+        $_data = [
             'store' => 'default',
             'website' => 'base',
             'attribute_set' => 'Default',
@@ -52,7 +52,7 @@ class MageTest_Fixture_Product extends MageTest_Fixture
             'minimal_price' => '',
             'status' => 'Enabled',
             'tax_class_id' => 'Taxable Goods',
-            'visibility' => 'Catalog, Search', 
+            'visibility' => 'Catalog, Search',
             'name' => 'Fixture',
             'url_key' => 'fixture'.time(),
             'meta_title' => 'Fixture',
@@ -77,21 +77,21 @@ class MageTest_Fixture_Product extends MageTest_Fixture
             'use_config_manage_stock' => '1',
             'store_id' => '0',
             'product_type_id' => 'simple'
-        );
+        ];
 
         $data = array_merge($_data, $data);
 
         $productAdapter = Mage::getModel('catalog/convert_adapter_product');
         $productAdapter->saveRow($data);
         unset($productAdapter);
-        
+
         $product = Mage::getModel('catalog/product');
         $productId = $product->getIdBySku($_data['sku']);
         $product->load($productId);
-        
+
         return $product;
     }
-    
+
     /**
      * Retrieve category ids
      *
@@ -104,11 +104,11 @@ class MageTest_Fixture_Product extends MageTest_Fixture
             ->getAttribute('catalog_category', 'url_path')
             ->getId();
         $select = $adapter->select()
-            ->from(array('e' => Mage::getSingleton('core/resource')->getTableName('catalog/category')), 'entity_id')
+            ->from(['e' => Mage::getSingleton('core/resource')->getTableName('catalog/category')], 'entity_id')
             ->join(
-                array('ev' => Mage::getSingleton('core/resource')->getTableName('catalog/category') . '_varchar'),
+                ['ev' => Mage::getSingleton('core/resource')->getTableName('catalog/category') . '_varchar'],
                 'e.entity_id = ev.entity_id AND ev.attribute_id=' . $urlAttributeId,
-                array('value'));
+                ['value']);
         $select->where('e.level>?', '1');
 
         $categoryIds = $adapter->fetchPairs($select);

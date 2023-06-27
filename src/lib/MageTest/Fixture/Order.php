@@ -35,9 +35,9 @@ class MageTest_Fixture_Order extends MageTest_Fixture
      *
      * @return Mage_Sales_Order
      */
-    public static function create(array $data = array())
+    public static function create(array $data = [])
     {
-        $_data = array(
+        $_data = [
             'state' => 'processing',
             'status' => 'processing',
             'coupon_code' => null,
@@ -198,7 +198,7 @@ class MageTest_Fixture_Order extends MageTest_Fixture
             'reward_points_balance_refunded' => null,
             'reward_points_balance_to_refund' => null,
             'reward_salesrule_points' => null,
-        );
+        ];
 
 
         $data = array_merge($_data, $data);

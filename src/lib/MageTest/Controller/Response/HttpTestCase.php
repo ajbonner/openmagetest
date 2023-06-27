@@ -110,7 +110,7 @@ class MageTest_Controller_Response_HttpTestCase
      */
     public function sendResponse()
     {
-        Mage::dispatchEvent('http_response_send_before', array('response'=>$this));
+        Mage::dispatchEvent('http_response_send_before', ['response'=>$this]);
 
         $headers = $this->sendHeaders();
         $content = implode("\n", $headers) . "\n\n";

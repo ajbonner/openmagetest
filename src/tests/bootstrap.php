@@ -9,7 +9,7 @@ require_once APPLICATION_PATH.'/Mage.php';
 // Update setting so for correct behaviour under test
 $_SERVER['SCRIPT_NAME'] = 'index.php';
 $_SERVER['SCRIPT_FILENAME'] = 'index.php';
-$_SESSION = array();
+$_SESSION = [];
 session_id(uniqid());
 
 // Global scope param to identify that the application is under test

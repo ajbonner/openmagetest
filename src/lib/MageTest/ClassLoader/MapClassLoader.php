@@ -18,7 +18,7 @@ namespace Symfony\Component\ClassLoader;
  */
 class MapClassLoader
 {
-    private $map = array();
+    private $map = [];
 
     /**
      * Constructor.
@@ -37,7 +37,7 @@ class MapClassLoader
      */
     public function register($prepend = false)
     {
-        spl_autoload_register(array($this, 'loadClass'), true, $prepend);
+        spl_autoload_register([$this, 'loadClass'], true, $prepend);
     }
 
     /**

@@ -81,7 +81,7 @@ class ClassCollectionLoader
             return;
         }
 
-        $files = array();
+        $files = [];
         $content = '';
         foreach ($classes as $class) {
             if (!class_exists($class) && !interface_exists($class) && (!function_exists('trait_exists') || !trait_exists($class))) {
@@ -91,7 +91,7 @@ class ClassCollectionLoader
             $r = new \ReflectionClass($class);
             $files[] = $r->getFileName();
 
-            $c = preg_replace(array('/^\s*<\?php/', '/\?>\s*$/'), '', file_get_contents($r->getFileName()));
+            $c = preg_replace(['/^\s*<\?php/', '/\?>\s*$/'], '', file_get_contents($r->getFileName()));
 
             // add namespace declaration for global code
             if (!$r->inNamespace()) {
@@ -112,7 +112,7 @@ class ClassCollectionLoader
 
         if ($autoReload) {
             // save the resources
-            self::writeCacheFile($metadata, serialize(array($files, $classes)));
+            self::writeCacheFile($metadata, serialize([$files, $classes]));
         }
     }
 
@@ -137,7 +137,7 @@ class ClassCollectionLoader
             $token = $tokens[$i];
             if (is_string($token)) {
                 $output .= $token;
-            } elseif (in_array($token[0], array(T_COMMENT, T_DOC_COMMENT))) {
+            } elseif (in_array($token[0], [T_COMMENT, T_DOC_COMMENT])) {
                 // strip comments
                 continue;
             } elseif (T_NAMESPACE === $token[0]) {
@@ -147,7 +147,7 @@ class ClassCollectionLoader
                 $output .= $token[1];
 
                 // namespace name and whitespaces
-                while (($t = $tokens[++$i]) && is_array($t) && in_array($t[0], array(T_WHITESPACE, T_NS_SEPARATOR, T_STRING))) {
+                while (($t = $tokens[++$i]) && is_array($t) && in_array($t[0], [T_WHITESPACE, T_NS_SEPARATOR, T_STRING])) {
                     $output .= $t[1];
                 }
                 if (is_string($t) && '{' === $t) {
@@ -209,13 +209,13 @@ class ClassCollectionLoader
         foreach (token_get_all($source) as $token) {
             if (is_string($token)) {
                 $output .= $token;
-            } elseif (!in_array($token[0], array(T_COMMENT, T_DOC_COMMENT))) {
+            } elseif (!in_array($token[0], [T_COMMENT, T_DOC_COMMENT])) {
                 $output .= $token[1];
             }
         }
 
         // replace multiple new lines with a single newline
-        $output = preg_replace(array('/\s+$/Sm', '/\n+/S'), "\n", $output);
+        $output = preg_replace(['/\s+$/Sm', '/\n+/S'], "\n", $output);
 
         return $output;
     }

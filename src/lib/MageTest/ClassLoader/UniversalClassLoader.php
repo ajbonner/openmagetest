@@ -60,10 +60,10 @@ namespace Symfony\Component\ClassLoader;
  */
 class UniversalClassLoader
 {
-    private $namespaces = array();
-    private $prefixes = array();
-    private $namespaceFallbacks = array();
-    private $prefixFallbacks = array();
+    private $namespaces = [];
+    private $prefixes = [];
+    private $namespaceFallbacks = [];
+    private $prefixFallbacks = [];
     private $useIncludePath = false;
 
     /**
@@ -215,7 +215,7 @@ class UniversalClassLoader
      */
     public function register($prepend = false)
     {
-        spl_autoload_register(array($this, 'loadClass'), true, $prepend);
+        spl_autoload_register([$this, 'loadClass'], true, $prepend);
     }
 
     /**
