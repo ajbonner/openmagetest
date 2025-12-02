@@ -5,7 +5,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 
 abstract class MageTest_PHPUnit_Framework_TestCase extends TestCase
 {
-    private static bool $bootstrapped = false;
+    private static ?MageTest_Bootstrap $sharedBootstrap = null;
     protected MageTest_Bootstrap $bootstrap;
     private Mage_Core_Model_Config $config;
 
@@ -13,6 +13,24 @@ abstract class MageTest_PHPUnit_Framework_TestCase extends TestCase
     {
         parent::setUp();
         $this->mageBootstrap();
+    }
+
+    public function tearDown(): void
+    {
+        // Close DB connections to prevent "too many connections" errors
+        try {
+            $resource = Mage::getSingleton('core/resource');
+            if ($resource) {
+                foreach ($resource->getConnections() as $connection) {
+                    try {
+                        $connection->closeConnection();
+                    } catch (Exception $e) {}
+                }
+            }
+        } catch (Exception $e) {
+            // Ignore errors during cleanup
+        }
+        parent::tearDown();
     }
 
     /**
@@ -123,17 +141,20 @@ abstract class MageTest_PHPUnit_Framework_TestCase extends TestCase
     {
         $_SERVER['MAGE_TEST'] = true;
 
-        $this->bootstrap = new MageTest_Bootstrap();
-        $this->bootstrap->init();
+        // Reuse the bootstrap instance across tests to avoid resource leaks
+        if (self::$sharedBootstrap === null) {
+            self::$sharedBootstrap = new MageTest_Bootstrap();
+            self::$sharedBootstrap->init();
 
-        if (!self::$bootstrapped) {
-            $this->bootstrapEventAreaParts($this->bootstrap, [
+            $this->bootstrapEventAreaParts(self::$sharedBootstrap, [
                 Mage_Core_Model_App_Area::AREA_GLOBAL,
                 Mage_Core_Model_App_Area::AREA_ADMIN,
                 Mage_Core_Model_App_Area::AREA_FRONTEND,
                 Mage_Core_Model_App_Area::AREA_ADMINHTML]
             );
         }
+
+        $this->bootstrap = self::$sharedBootstrap;
 
         return $this->bootstrap;
     }

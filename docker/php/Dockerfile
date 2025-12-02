@@ -1,4 +1,4 @@
-FROM php:8.2-fpm
+FROM php:8.4-fpm
 
 RUN apt-get update \
     && apt-get install -y libicu-dev libcurl4-openssl-dev libgd-dev libxml2-dev libzip-dev p7zip zip zlib1g-dev \

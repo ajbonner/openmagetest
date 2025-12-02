@@ -2,13 +2,14 @@
     "name": "openmagetest/magento-phpunit-extension",
     "type": "magento-module",
     "license":"MIT",
-    "description":"OpenMage PHPUnit extension, a lightweight module and library for testing OpenMage applications with PHPUnit",
+    "description":"OpenMage PHPUnit extension, a lightweight framework for testing OpenMage applications with PHPUnit",
     "keywords": ["TDD", "unit", "unit-testing", "openmage", "zend", "zend framework", "tests", "testing"],
     "require": {
-        "php": ">=8.1",
+        "php": ">=8.2",
         "phpunit/phpunit": "^9.0"
     },
     "require-dev": {
+        "openmage/magento-lts": ">=20.0",
         "roave/security-advisories": "dev-latest"
     },
     "repositories": [
@@ -18,13 +19,17 @@
         }
     ],
     "config": {
-        "bin-dir": "bin"
+        "allow-plugins": {
+            "cweagans/composer-patches": true,
+            "openmage/composer-plugin": true,
+            "magento-hackathon/magento-composer-installer": true
+        }
     },
     "minimum-stability": "dev",
     "authors":[
         {
             "name":"Alistair Stead",
-            "homepage":"https://twitter.com/alistairstead"
+            "homepage":"https://github.com/alistairstead"
         },
         {
             "name":"Aaron Bonner",
@@ -38,5 +43,8 @@
             "name": "Other contributors",
             "homepage":"https://github.com/ajbonner/openmagetest/contributors"
         }
-    ]
+    ],
+    "extra": {
+        "magento-root-dir": "public"
+    }
 }
