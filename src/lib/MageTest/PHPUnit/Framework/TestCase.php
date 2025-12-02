@@ -13,7 +13,9 @@ abstract class MageTest_PHPUnit_Framework_TestCase extends TestCase
     {
         parent::setUp();
         $this->mageBootstrap();
+        Mage::getConfig()->resetTestState();
         Mage::app()->resetDispatchedEvents();
+        $this->resetRegistry();
     }
 
     public function tearDown(): void
@@ -347,5 +349,23 @@ abstract class MageTest_PHPUnit_Framework_TestCase extends TestCase
         }
 
         return $this->config;
+    }
+
+    /**
+     * Clear all helper mocks from the Mage registry to ensure test isolation.
+     * Singletons are not cleared as they may hold required magento state (e.g., core/resource).
+     */
+    private function resetRegistry(): void
+    {
+        $reflection = new ReflectionClass(Mage::class);
+        $registryProperty = $reflection->getProperty('_registry');
+        $registryProperty->setAccessible(true);
+        $registry = $registryProperty->getValue();
+
+        foreach (array_keys($registry) as $key) {
+            if (str_starts_with($key, '_helper/')) {
+                Mage::unregister($key);
+            }
+        }
     }
 }

@@ -231,4 +231,16 @@ class MageTest_Core_Model_Config extends Mage_Core_Model_Config
     {
         return $this->disabledEvents;
     }
+
+    /**
+     * Reset all test-related state to ensure clean test isolation
+     */
+    public function resetTestState(): void
+    {
+        $this->mockObject = [];
+        $this->disabledEvents = [];
+        $this->disableAllEvents = false;
+        $this->observerWhitelist = [];
+        $this->observerBlacklist = [];
+    }
 }
