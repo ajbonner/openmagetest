@@ -11,7 +11,7 @@ With the [Zend Framework 1.x](https://framework.zend.com/manual/1.12/en/manual.h
 ## Requirements
 
 * PHPUnit 9.0+
-* PHP 8.1+
+* PHP 8.2+
 * OpenMage 20.x+
 
 ## Installation
@@ -25,29 +25,24 @@ Inside your project's composer.json ensure your have at least the following cont
 ```json
 {
     "require-dev": {
-        "openmagetest/magento-phpunit-extension": "*"
+        "openmagetest/magento-phpunit-extension": "dev-master"
     },
     "repositories": [
-	    {
-	        "type": "composer",
-	        "url": "https://github.com/ajbonner/openmagetest"
-	    }
+        {
+            "type": "vcs",
+            "url": "https://github.com/ajbonner/openmagetest"
+        },
+        {
+            "type": "composer",
+            "url": "https://packages.firegento.com"
+        }
     ],
-    "extra":{
+    "extra": {
         "magento-root-dir": "./"
     },
     "config": {
-        "bin-dir": "shell"
-    },
-    "autoload": {
-        "psr-0": {
-            "": [
-                "app",
-                "app/code/local",
-                "app/code/community",
-                "app/code/core",
-                "lib"
-            ]
+        "allow-plugins": {
+            "magento-hackathon/magento-composer-installer": true
         }
     },
     "minimum-stability": "dev"
@@ -97,7 +92,7 @@ Afterward your OpenMage project's directory structure should look something like
 You can verify the installation by running OpenMageTest's own bundled test suite.
 
 ```bash
-$ phpunit -c vendor/ajbonner/openmagetest/tests/phpunit.xml.dist
+$ vendor/bin/phpunit -c vendor/openmagetest/magento-phpunit-extension/src/tests/phpunit.xml.dist
 ```
 
 You can read more about Composer on its [official webpage](http://getcomposer.org). To find out more about Magento Composer Installer see its [Github project page](https://github.com/magento-hackathon/magento-composer-installer), or take a look at [Vinai Kopp's](http://twitter.com/VinaiKopp) [MageBase](http://www.magebase.com) [Composer with Magento article](http://magebase.com/magento-tutorials/composer-with-magento/).
@@ -109,9 +104,77 @@ Modman maintains a detailed [wiki](https://github.com/colinmollenhour/modman/wik
 
 ## Usage
 
+### Unit Tests
+
+Extend `MageTest_PHPUnit_Framework_TestCase` for unit testing models, helpers, and blocks:
+
+```php
+class My_Module_Model_ExampleTest extends MageTest_PHPUnit_Framework_TestCase
+{
+    public function testModelCanBeLoaded()
+    {
+        $model = Mage::getModel('mymodule/example');
+        $this->assertInstanceOf('My_Module_Model_Example', $model);
+    }
+
+    public function testWithMockedModel()
+    {
+        // Create a mock for sales/order
+        $orderMock = $this->getModelMock('sales/order', ['load', 'save']);
+        $orderMock->expects($this->once())
+            ->method('load')
+            ->willReturnSelf();
+
+        // Replace the model in Magento's registry
+        $this->replaceByMock('model', 'sales/order', $orderMock);
+
+        // Now Mage::getModel('sales/order') returns your mock
+        $order = Mage::getModel('sales/order');
+        $order->load(1);
+    }
+}
+```
+
+Available mock helpers:
+- `getModelMock($modelClass, $methods)` - Mock a model
+- `getBlockMock($blockClass, $methods)` - Mock a block
+- `getHelperMock($helperClass, $methods)` - Mock a helper
+- `getResourceModelMock($resourceClass, $methods)` - Mock a resource model
+- `replaceByMock($type, $classAlias, $mock)` - Replace class with mock in registry
+
+### Controller Tests
+
+Extend `MageTest_PHPUnit_Framework_ControllerTestCase` for functional controller testing:
+
+```php
+class My_Module_IndexControllerTest extends MageTest_PHPUnit_Framework_ControllerTestCase
+{
+    public function testIndexActionRendersCorrectly()
+    {
+        $this->dispatch('/mymodule/index/index');
+
+        $this->assertController('index');
+        $this->assertAction('index');
+        $this->assertRoute('mymodule');
+        $this->assertResponseCode(200);
+    }
+
+    public function testPostActionProcessesForm()
+    {
+        $this->getRequest()
+            ->setMethod('POST')
+            ->setPost(['name' => 'Test']);
+
+        $this->dispatch('/mymodule/index/save');
+
+        $this->assertRedirectTo('/mymodule/index/success');
+    }
+}
+```
+
 ## Feature Requests
 
-If you have an idea of how to make this a better project or add functionality that would be of use the community then please [submit a feature request](https://github.com/MageTest/Mage-Test/issues). Create a new ticket and add the label of 'Feature'.
+If you have an idea of how to make this a better project or add functionality that would be of use the community then please [submit a feature request](https://github.com/ajbonner/openmagetest/issues). Create a new ticket and add the label of 'Feature'.
 
 ## Contributing
 

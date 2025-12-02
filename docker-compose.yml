@@ -1,32 +1,31 @@
-version: '3'
 services:
   mysql:
-    image: "mysql:8-debian"
+    image: "mariadb:11.4-ubi"
     ports:
       - "33306:3306"
     cap_add:
       - SYS_NICE
     volumes:
-      - ./:/srv/magetest
+      - ./:/srv/openmagetest
     environment:
       MYSQL_ROOT_PASSWORD: password123
-      MYSQL_DATABASE: magetest_dev
-      MYSQL_USER: magetest
+      MYSQL_DATABASE: openmagetest_dev
+      MYSQL_USER: openmagetest
       MYSQL_PASSWORD: password123
-      OPENMAGE_ROOT: /srv/magetest/build/openmage
+      OPENMAGE_ROOT: /srv/openmagetest/build/openmage
   php:
-    image: php:8.2-fpm
+    image: php:8.4-fpm
     build:
       context: ./docker/php
     volumes:
-      - ./:/srv/magetest
+      - ./:/srv/openmagetest
     depends_on:
       - mysql
   nginx:
     image: nginx:latest
     volumes:
       - ./docker/nginx/nginx.template:/etc/nginx/templates/default.conf.template:ro
-      - ./:/srv/magetest
+      - ./:/srv/openmagetest
     ports:
       - "8080:80"
     links:
@@ -34,29 +33,29 @@ services:
     environment:
       - NGINX_HOST=_
       - NGINX_PORT=80
-      - NGINX_ROOT=/srv/magetest/build/openmage
+      - NGINX_ROOT=/srv/openmagetest/build/openmage
       - NGINX_PROXY=php:9000
     depends_on:
       - php
-  magetest_setup:
-    image: php:8.2-fpm
+  openmagetest_setup:
+    image: php:8.4-fpm
     volumes:
-      - ./:/srv/magetest
+      - ./:/srv/openmagetest
     restart: "no"
     environment:
-      - OPENMAGE_ROOT=/srv/magetest/build/openmage
-      - OPENMAGE_VERSION=v20.1.0-rc5
+      - OPENMAGE_ROOT=/srv/openmagetest/build/openmage
+      - OPENMAGE_VERSION=v20.16.0
     depends_on:
       - php
-    entrypoint: ['/usr/bin/env', 'bash', '-c', '/srv/magetest/docker/setup.sh']
+    entrypoint: ['/usr/bin/env', 'bash', '-c', '/srv/openmagetest/docker/setup.sh']
   testsuite:
-    image: php:8.2-fpm
+    image: php:8.4-fpm
     volumes:
-      - ./build/openmage:/srv/magetest
-    working_dir: /srv/magetest/tests
+      - ./build/openmage:/srv/openmagetest
+    working_dir: /srv/openmagetest/tests
     restart: "no"
     depends_on:
       - mysql
     profiles:
       - testsuite
-    entrypoint: "/bin/sh -c 'sleep 2 && /srv/magetest/vendor/bin/phpunit'"
+    entrypoint: "/bin/sh -c 'sleep 2 && /srv/openmagetest/vendor/bin/phpunit'"
