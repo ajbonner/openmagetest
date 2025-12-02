@@ -3,8 +3,6 @@ services:
     image: "mariadb:11.4-ubi"
     ports:
       - "33306:3306"
-    cap_add:
-      - SYS_NICE
     volumes:
       - ./:/srv/openmagetest
     environment:
@@ -47,7 +45,8 @@ services:
       - OPENMAGE_VERSION=v20.16.0
     depends_on:
       - php
-    entrypoint: ['/usr/bin/env', 'bash', '-c', '/srv/openmagetest/docker/setup.sh']
+    entrypoint:
+      ["/usr/bin/env", "bash", "-c", "/srv/openmagetest/docker/setup.sh"]
   testsuite:
     image: php:8.4-fpm
     volumes:

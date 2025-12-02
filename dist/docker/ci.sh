@@ -1,12 +1,11 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Setup mysql database
-mysql -uroot -e 'CREATE DATABASE `magento`;'
+mysql -uroot -e "CREATE DATABASE magento;"
 
 # Determine base paths
-BIN_DIR=$(dirname $(readlink -f $0))
-BASE_DIR=$(dirname $BIN_DIR)
-
+BIN_DIR="$(dirname $(readlink -f $0))"
+BASE_DIR="$(dirname "$BIN_DIR")"
 # Install build utilities
 curl -sS https://raw.github.com/netz98/n98-magerun/master/n98-magerun.phar -o $BIN_DIR/magerun.phar
 curl -sS https://raw.github.com/colinmollenhour/modman/master/modman -o $BIN_DIR/modman

@@ -1,11 +1,10 @@
 #!/usr/bin/env bash
 
-set -eu
-set -o pipefail
+set -euo pipefail
 
 if [ -z "${OPENMAGE_ROOT-}" ]; then
   echo "Environment variable OPENMAGE_ROOT not found"
-  exit 1;
+  exit 1
 fi
 
 bash /srv/magetest/docker/openmage/install_openmage.sh
