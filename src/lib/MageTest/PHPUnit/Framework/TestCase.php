@@ -13,6 +13,7 @@ abstract class MageTest_PHPUnit_Framework_TestCase extends TestCase
     {
         parent::setUp();
         $this->mageBootstrap();
+        Mage::app()->resetDispatchedEvents();
     }
 
     public function tearDown(): void
