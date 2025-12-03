@@ -6,16 +6,19 @@ use PHPUnit\Framework\MockObject\MockObject;
 abstract class MageTest_PHPUnit_Framework_TestCase extends TestCase
 {
     private static ?MageTest_Bootstrap $sharedBootstrap = null;
+    private static array $pendingSingletonCleanup = [];
+    private static ?Mage_Core_Model_Resource $realCoreResource = null;
     protected MageTest_Bootstrap $bootstrap;
     private Mage_Core_Model_Config $config;
+    private array $singletonMocks = [];
 
     public function setUp(): void
     {
         parent::setUp();
         $this->mageBootstrap();
         Mage::getConfig()->resetTestState();
-        Mage::app()->resetDispatchedEvents();
         $this->resetRegistry();
+        Mage::app()->resetDispatchedEvents();
     }
 
     public function tearDown(): void
@@ -155,6 +158,9 @@ abstract class MageTest_PHPUnit_Framework_TestCase extends TestCase
                 Mage_Core_Model_App_Area::AREA_FRONTEND,
                 Mage_Core_Model_App_Area::AREA_ADMINHTML]
             );
+
+            // Save reference to the real core/resource singleton before any test can mock it
+            self::$realCoreResource = Mage::getSingleton('core/resource');
         }
 
         $this->bootstrap = self::$sharedBootstrap;
@@ -293,7 +299,6 @@ abstract class MageTest_PHPUnit_Framework_TestCase extends TestCase
         }
 
         Mage::register($registryKey, $mock);
-
         return $this;
     }
 
@@ -304,6 +309,42 @@ abstract class MageTest_PHPUnit_Framework_TestCase extends TestCase
     public function resetHelperMock($class): self
     {
         $registryKey = '_helper/' . $class;
+
+        if (Mage::registry($registryKey)) {
+            Mage::unregister($registryKey);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param string $class
+     * @param MockObject $mock
+     * @return $this
+     * @throws Mage_Core_Exception
+     */
+    public function setSingletonMock(string $class, $mock): self
+    {
+        $registryKey = '_singleton/' . $class;
+
+        if (Mage::registry($registryKey)) {
+            Mage::unregister($registryKey);
+        }
+
+        Mage::register($registryKey, $mock);
+        $this->singletonMocks[] = $registryKey;
+        // Track in static property for cleanup by next test
+        self::$pendingSingletonCleanup[$registryKey] = true;
+        return $this;
+    }
+
+    /**
+     * @param string $class
+     * @return $this
+     */
+    public function resetSingletonMock(string $class): self
+    {
+        $registryKey = '_singleton/' . $class;
 
         if (Mage::registry($registryKey)) {
             Mage::unregister($registryKey);
@@ -352,11 +393,30 @@ abstract class MageTest_PHPUnit_Framework_TestCase extends TestCase
     }
 
     /**
-     * Clear all helper mocks from the Mage registry to ensure test isolation.
-     * Singletons are not cleared as they may hold required magento state (e.g., core/resource).
+     * Clear all helper mocks and tracked singleton mocks from the Mage registry to ensure test isolation.
+     * Only singleton mocks explicitly set via setSingletonMock() are cleared, as other singletons
+     * may hold required framework state (e.g., core/resource).
      */
     private function resetRegistry(): void
     {
+        // Clean up any singleton mocks from previous tests (static tracking)
+        foreach (array_keys(self::$pendingSingletonCleanup) as $key) {
+            if (Mage::registry($key)) {
+                Mage::unregister($key);
+            }
+        }
+        self::$pendingSingletonCleanup = [];
+
+        // Restore the real core/resource singleton to preserve its connections
+        // This is critical for transaction rollback to work properly
+        if (self::$realCoreResource !== null) {
+            $registryKey = '_singleton/core/resource';
+            if (Mage::registry($registryKey)) {
+                Mage::unregister($registryKey);
+            }
+            Mage::register($registryKey, self::$realCoreResource);
+        }
+
         $reflection = new ReflectionClass(Mage::class);
         $registryProperty = $reflection->getProperty('_registry');
         $registryProperty->setAccessible(true);
@@ -366,6 +426,12 @@ abstract class MageTest_PHPUnit_Framework_TestCase extends TestCase
             if (str_starts_with($key, '_helper/')) {
                 Mage::unregister($key);
             }
+            // Clear eav/config singleton to prevent stale attribute caches
+            if ($key === '_singleton/eav/config') {
+                Mage::unregister($key);
+            }
         }
+
+        $this->singletonMocks = [];
     }
 }

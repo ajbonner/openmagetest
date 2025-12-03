@@ -38,6 +38,21 @@ class MageTest_Core_Model_Config extends Mage_Core_Model_Config
     protected $mockObject = [];
 
     /**
+     * Array of model test doubles, indexed by model alias (e.g., 'catalog/product')
+     * Unlike mockObject which uses a queue, these return the same instance every time.
+     *
+     * @var array
+     */
+    protected $modelTestDoubles = [];
+
+    /**
+     * Array of resource model test doubles, indexed by model alias
+     *
+     * @var array
+     */
+    protected $resourceModelTestDoubles = [];
+
+    /**
      * Array of event names that should not be dispatched
      *
      * @var string[]
@@ -75,13 +90,41 @@ class MageTest_Core_Model_Config extends Mage_Core_Model_Config
     }
 
     /**
+     * Set a test double for a model class.
+     * Unlike setModelInstanceMock, this always returns the same instance (not a queue).
+     *
+     * @param string $modelClass Model alias (e.g., 'catalog/product')
+     * @param object $testDouble
+     */
+    public function setModelTestDouble(string $modelClass, $testDouble): void
+    {
+        $this->modelTestDoubles[$modelClass] = $testDouble;
+    }
+
+    /**
+     * Set a test double for a resource model class.
+     *
+     * @param string $modelClass Resource model alias (e.g., 'catalog/product_collection')
+     * @param object $testDouble
+     */
+    public function setResourceModelTestDouble(string $modelClass, $testDouble): void
+    {
+        $this->resourceModelTestDoubles[$modelClass] = $testDouble;
+
+        // Clear existing resource singleton from registry so the test double gets used
+        $registryKey = '_resource_singleton/' . $modelClass;
+        if (Mage::registry($registryKey)) {
+            Mage::unregister($registryKey);
+        }
+    }
+
+    /**
      * Reset the mock stack. Only for provided model class, if supplied
      *
      * @param string $modelClass
-     *
-     * @return null
+     * @return void
      */
-    public function resetMockStack($modelClass = null)
+    public function resetMockStack($modelClass = null): void
     {
         if (is_null($modelClass)) {
             $this->mockObject = [];
@@ -146,6 +189,12 @@ class MageTest_Core_Model_Config extends Mage_Core_Model_Config
      */
     public function getModelInstance($modelClass = '', $constructArguments = [])
     {
+        // Check test doubles first (single instance, always returned)
+        if (isset($this->modelTestDoubles[(string)$modelClass])) {
+            return $this->modelTestDoubles[(string)$modelClass];
+        }
+
+        // Then check mock queue
         if (isset($this->mockObject[$modelClass])) {
             if (count($this->mockObject[$modelClass]) > 1) {
                 return array_shift($this->mockObject[$modelClass]);
@@ -154,6 +203,23 @@ class MageTest_Core_Model_Config extends Mage_Core_Model_Config
             }
         }
         return parent::getModelInstance($modelClass, $constructArguments);
+    }
+
+    /**
+     * Override of getResourceModelInstance to check for test doubles.
+     *
+     * @param string $modelClass
+     * @param array  $constructArguments
+     *
+     * @return object
+     */
+    public function getResourceModelInstance($modelClass = '', $constructArguments = [])
+    {
+        if (isset($this->resourceModelTestDoubles[(string) $modelClass])) {
+            return $this->resourceModelTestDoubles[(string) $modelClass];
+        }
+
+        return parent::getResourceModelInstance($modelClass, $constructArguments);
     }
 
     /**
@@ -232,12 +298,18 @@ class MageTest_Core_Model_Config extends Mage_Core_Model_Config
         return $this->disabledEvents;
     }
 
-    /**
-     * Reset all test-related state to ensure clean test isolation
-     */
     public function resetTestState(): void
     {
+        // Clear registry entries for any resource singletons that were mocked
+        foreach (array_keys($this->resourceModelTestDoubles) as $modelClass) {
+            $registryKey = '_resource_singleton/' . $modelClass;
+            if (Mage::registry($registryKey)) {
+                Mage::unregister($registryKey);
+            }
+        }
         $this->mockObject = [];
+        $this->modelTestDoubles = [];
+        $this->resourceModelTestDoubles = [];
         $this->disabledEvents = [];
         $this->disableAllEvents = false;
         $this->observerWhitelist = [];
