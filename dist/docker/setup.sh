@@ -7,9 +7,15 @@ if [ -z "${OPENMAGE_ROOT-}" ]; then
   exit 1
 fi
 
-bash /srv/magetest/docker/openmage/install_openmage.sh
-bash /srv/magetest/docker/openmage/setup_openmage.sh
+/usr/bin/env bash /build/setup/openmage/install_openmage.sh
+/usr/bin/env bash /build/setup/openmage/setup_openmage.sh
 
-ln -s /srv/magetest/src/{app,lib,tests} "${OPENMAGE_ROOT}/"
+cd /srv/openmagetest/openmage
+modman init
+ln -s /build .modman/OpenMageTest
+modman repair
+ln -sf /build/src/tests /srv/openmagetest/openmage/tests
 
-/usr/bin/env php -derror_reporting='~E_DEPRECATED' /usr/bin/magerun.phar --root-dir="${OPENMAGE_ROOT}" sys:setup:run
+/usr/bin/env php -derror_reporting='~E_DEPRECATED' vendor/bin/n98-magerun --root-dir="${OPENMAGE_ROOT}" sys:setup:run
+
+/usr/bin/env bash /build/setup/openmage/install_sample_data.sh

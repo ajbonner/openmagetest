@@ -174,59 +174,33 @@ class MageTest_Bootstrap
         return $this->_mageReflection;
     }
 
-    /**
-     * undocumented function
-     *
-     * @param string $name
-     * @return ReflectionProperty
-     * @author Alistair Stead
-     **/
-    public function getProtectedProperty($name)
+    public function getProtectedProperty(string $name): ReflectionProperty
     {
         $property = $this->getMageReflection()->getProperty($name);
         $property->setAccessible(true);
         return $property;
     }
 
-    /**
-     * undocumented function
-     *
-     * @param string $name
-     * @return mixed
-     * @author Alistair Stead
-     **/
-    public function getProtectedPropertyValue($name)
+    public function getProtectedPropertyValue(string $name): mixed
     {
         return $this->getProtectedProperty($name)->getValue();
     }
 
-    /**
-     * undocumented function
-     *
-     * @param string $name
-     * @param mixed $value
-     * @return void
-     * @author Alistair Stead
-     **/
-    public function setProtectedProperty($name, $value)
+    public function setProtectedProperty(string $name, mixed $value): void
     {
         $property = $this->getProtectedProperty($name);
-        $property->setValue($value);
+        $property->setValue($this, $value);
     }
 
     /**
-     * Validate that we are able to run unit tests
-     *
-     * @return boolean
-     * @author Alistair Stead
-     * @throws DomainException
-     **/
-    public function isValid()
+     * Validate environment is able to run unit tests
+     */
+    public function isValid(): bool
     {
-        if (version_compare(PHP_VERSION, '5.3', '<')) {
+        if (version_compare(PHP_VERSION, '8.2', '<')) {
             throw new DomainException(
                 sprintf(
-                    "MageTest can only function with a PHP version greater than 5.3.x, %s is installed",
+                    "OpenMageTest supports PHP >= 8.2, %s is installed",
                     PHP_VERSION
                 )
             );

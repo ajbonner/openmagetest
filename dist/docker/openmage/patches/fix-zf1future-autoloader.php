@@ -25,5 +25,3 @@ if ($zf1_include_idx !== null && $end_mage_includes_idx !== null) {
 }
 
 set_include_path(implode(PATH_SEPARATOR, $include_paths));
-
-

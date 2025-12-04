@@ -53,7 +53,7 @@ class Mage_Catalog_CategoryControllerTest extends MageTest_PHPUnit_Framework_Con
                 // Test that the h1 tag is correctly populated with the category name
                 $this->assertQueryContentContains(
                     'h1',
-                    $category->getName(),
+                    htmlspecialchars($category->getName()),
                     'The page h1 has not been correctly set'
                 );
                 // Reset after testing the response

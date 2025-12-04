@@ -3,58 +3,80 @@ services:
     image: "mariadb:11.4-ubi"
     ports:
       - "33306:3306"
-    volumes:
-      - ./:/srv/openmagetest
     environment:
       MYSQL_ROOT_PASSWORD: password123
       MYSQL_DATABASE: openmagetest_dev
       MYSQL_USER: openmagetest
       MYSQL_PASSWORD: password123
-      OPENMAGE_ROOT: /srv/openmagetest/build/openmage
+
   php:
-    image: php:8.4-fpm
+    image: openmagetest/php:8.4
     build:
-      context: ./docker/php
+      context: ./dist/docker/php
+      args:
+        PHP_BASE_IMAGE: php:8.4-trixie
     volumes:
-      - ./:/srv/openmagetest
+      - ./build:/srv/openmagetest
+
+  php-fpm:
+    image: openmagetest/php:8.4-fpm-trixie
+    build:
+      context: ./dist/docker/php
+      args:
+        PHP_BASE_IMAGE: php:8.4-fpm
+    volumes:
+      - ./build:/srv/openmagetest
     depends_on:
       - mysql
+
   nginx:
     image: nginx:latest
     volumes:
-      - ./docker/nginx/nginx.template:/etc/nginx/templates/default.conf.template:ro
-      - ./:/srv/openmagetest
+      - ./dist/docker/nginx/nginx.template:/etc/nginx/templates/default.conf.template:ro
+      - ./build:/srv/openmagetest
     ports:
       - "8080:80"
-    links:
-      - php
     environment:
       - NGINX_HOST=_
       - NGINX_PORT=80
-      - NGINX_ROOT=/srv/openmagetest/build/openmage
-      - NGINX_PROXY=php:9000
+      - NGINX_ROOT=/srv/openmagetest/openmage
+      - NGINX_PROXY=php-fpm:9000
     depends_on:
-      - php
-  openmagetest_setup:
-    image: php:8.4-fpm
+      - php-fpm
+
+  setup:
+    image: openmagetest/php:8.4
     volumes:
-      - ./:/srv/openmagetest
+      - ./build:/srv/openmagetest
+      - ./dist/docker:/build/setup
+      - ./src:/build/src
+      - ./modman:/build/modman:ro
     restart: "no"
     environment:
-      - OPENMAGE_ROOT=/srv/openmagetest/build/openmage
+      - OPENMAGE_ROOT=/srv/openmagetest/openmage
       - OPENMAGE_VERSION=v20.16.0
+      - MYSQL_ROOT_PASSWORD=password123
+      - MYSQL_DATABASE=openmagetest_dev
+      - MYSQL_USER=openmagetest
+      - MYSQL_PASSWORD=password123
+      - MYSQL_HOST=mysql
     depends_on:
-      - php
+      - mysql
     entrypoint:
-      ["/usr/bin/env", "bash", "-c", "/srv/openmagetest/docker/setup.sh"]
-  testsuite:
-    image: php:8.4-fpm
+      ["/usr/bin/env", "bash", "-c", "/build/setup/setup.sh"]
+    profiles: ["setup"]
+
+  tests:
+    image: openmagetest/php:8.4
     volumes:
-      - ./build/openmage:/srv/openmagetest
-    working_dir: /srv/openmagetest/tests
+      - ./build:/srv/openmagetest
+      - ./dist/docker:/build/setup
+      - ./src:/build/src
+      - ./modman:/build/modman:ro
+    working_dir: /srv/openmagetest/openmage
     restart: "no"
     depends_on:
       - mysql
     profiles:
       - testsuite
-    entrypoint: "/bin/sh -c 'sleep 2 && /srv/openmagetest/vendor/bin/phpunit'"
+    entrypoint: "/bin/sh -c 'sleep 2 && /srv/openmagetest/openmage/vendor/bin/phpunit -c tests'"
